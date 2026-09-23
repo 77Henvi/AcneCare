@@ -34,8 +34,8 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ["'IBM Plex Sans'", "'IBM Plex Sans Thai'", "system-ui", "sans-serif"],
-        display: ["'Fraunces'", "serif"],
+        sans: ["'Anuphan'", "system-ui", "sans-serif"],
+        display: ["'Fraunces'", "'Taviraj'", "serif"],
       },
       borderRadius: {
         card: "14px",
