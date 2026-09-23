@@ -27,8 +27,30 @@ and it'll walk through quality check → mock analysis → result page → histo
 | Image quality check (brightness/blur heuristic) | Real, runs in-browser |
 | Acne/skin-type taxonomy | Real — matches the design doc & medical reference |
 | Recommendation engine (incl. mandatory dermatologist referral for nodule/cyst) | Real, rule-based |
+| Visual design (glass nav, hero, scan animation, staggered result reveal) | Real, `framer-motion` |
 | AI prediction | **Mocked** — random output, see below |
 | Scan history/persistence | **Mocked** — browser `localStorage`, see below |
+
+## Design direction
+
+Redesigned against two Pinterest references (AI-skincare landing page with a
+face-scan overlay + stats sidebar; an editorial skincare brand with an
+oversized serif wordmark) while **keeping the original color tokens** from
+`tailwind.config.ts` — nothing in the palette changed, only layout,
+typography scale, and motion.
+
+- **One deliberate motion moment per screen**, not animation everywhere:
+  a scanning face outline on the landing page (`components/HeroScanVisual.tsx`),
+  a scan-line + corner-bracket overlay while the AI is "analyzing"
+  (`components/ScanLineOverlay.tsx`), a staggered reveal on the result page,
+  and a sliding active-tab pill in the nav.
+- **No fabricated stats.** The landing page intentionally does not show a
+  made-up "95% accurate" number — see the medical-safety guardrail in the
+  design doc. The stat row shows only true, structural facts (class count,
+  region count, "0 raw images uploaded").
+- Stack: `framer-motion` for the animation listed above; everything else is
+  plain Tailwind transitions.
+
 
 ## Swap points (do these once the other pieces are ready)
 
