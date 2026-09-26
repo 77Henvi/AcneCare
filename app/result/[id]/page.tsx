@@ -28,7 +28,7 @@ export default function ResultPage({ params }: { params: { id: string } }) {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="mx-auto max-w-xl space-y-6">
       <div>
         <h1 className="font-display text-2xl text-teal-900">ผลการวิเคราะห์ผิว</h1>
         <p className="mt-1 text-xs text-ink/45">
@@ -36,7 +36,7 @@ export default function ResultPage({ params }: { params: { id: string } }) {
         </p>
       </div>
       <ResultCard scan={scan} />
-      <div className="flex gap-3">
+      <div className="flex flex-wrap gap-3">
         <Link
           href="/scan"
           className="rounded-card bg-teal-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-teal-900 transition-colors"

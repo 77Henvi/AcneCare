@@ -24,28 +24,26 @@ const facts = [
 
 export default function LandingPage() {
   return (
-    <div className="space-y-16">
-      <section className="grid items-center gap-10 pt-6 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
+    <div className="space-y-14 sm:space-y-16">
+      <section className="grid items-center gap-10 pt-2 sm:pt-4 lg:grid-cols-[1.15fr_0.85fr] lg:gap-14 xl:gap-20">
         <motion.div variants={container} initial="hidden" animate="show" className="space-y-5">
-          <motion.p variants={item} className="text-sm uppercase tracking-wide text-teal-600/80">
+          <motion.p variants={item} className="text-xs uppercase tracking-wide text-teal-600/80 sm:text-sm">
             AI Skin Analysis — ต้นแบบ
           </motion.p>
 
           <motion.h1
             variants={item}
-            className="font-display text-[2.75rem] leading-[1.05] text-teal-900 sm:text-6xl"
+            className="text-balance font-display text-4xl leading-[1.1] text-teal-900 sm:text-5xl lg:text-6xl"
           >
-            รู้จัก
-            <br />
-            ผิวคุณ<span className="text-teal-400">ให้ลึกขึ้น</span>
+            รู้จักผิวคุณ<span className="text-teal-400">ให้ลึกขึ้น</span>
           </motion.h1>
 
-          <motion.p variants={item} className="max-w-md text-ink/70">
+          <motion.p variants={item} className="max-w-md text-sm text-ink/70 sm:text-base">
             ถ่ายรูปหน้า แล้วให้ AI ช่วยประเมินลักษณะผิวและลักษณะสิวเบื้องต้น พร้อมคำแนะนำการดูแลผิวที่ปลอดภัย
             — ไม่ใช่เครื่องมือวินิจฉัยโรคและไม่ทดแทนคำแนะนำของแพทย์
           </motion.p>
 
-          <motion.div variants={item} className="flex items-center gap-4 pt-1">
+          <motion.div variants={item} className="flex flex-wrap items-center gap-x-4 gap-y-2 pt-1">
             <Link href="/scan" className="inline-block">
               <motion.span
                 whileHover={{ scale: 1.03 }}
@@ -60,12 +58,12 @@ export default function LandingPage() {
             </Link>
           </motion.div>
 
-          <motion.dl variants={item} className="grid grid-cols-3 gap-4 pt-6 border-t border-sand-300 max-w-md">
+          <motion.dl variants={item} className="grid max-w-md grid-cols-3 gap-3 border-t border-sand-300 pt-6 sm:gap-4">
             {facts.map((f) => (
               <div key={f.label}>
                 <dt className="sr-only">{f.label}</dt>
-                <dd className="font-display text-2xl text-teal-900">{f.value}</dd>
-                <dd className="mt-0.5 text-xs leading-snug text-ink/55">{f.label}</dd>
+                <dd className="font-display text-xl text-teal-900 sm:text-2xl">{f.value}</dd>
+                <dd className="mt-0.5 text-[11px] leading-snug text-ink/55 sm:text-xs">{f.label}</dd>
               </div>
             ))}
           </motion.dl>
@@ -75,6 +73,7 @@ export default function LandingPage() {
           initial={{ opacity: 0, scale: 0.92 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
+          className="mx-auto w-full max-w-[220px] sm:max-w-[260px] lg:max-w-[280px]"
         >
           <HeroScanVisual />
         </motion.div>
@@ -85,7 +84,7 @@ export default function LandingPage() {
         initial="hidden"
         whileInView="show"
         viewport={{ once: true, margin: "-60px" }}
-        className="grid gap-4 sm:grid-cols-3"
+        className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
       >
         {[
           { title: "ตรวจคุณภาพภาพ", body: "เช็กแสง ความเบลอ และขนาดใบหน้าก่อนวิเคราะห์" },

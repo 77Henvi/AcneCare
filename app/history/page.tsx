@@ -13,7 +13,7 @@ export default function HistoryPage() {
   }, []);
 
   return (
-    <div className="space-y-6">
+    <div className="mx-auto max-w-2xl space-y-6">
       <h1 className="font-display text-2xl text-teal-900">ประวัติการสแกน</h1>
 
       {scans.length === 0 ? (
@@ -21,15 +21,15 @@ export default function HistoryPage() {
           ยังไม่มีประวัติการสแกน — <Link href="/scan" className="text-teal-600 underline">เริ่มสแกนครั้งแรก</Link>
         </div>
       ) : (
-        <ul className="space-y-3">
+        <ul className="grid gap-3 sm:grid-cols-2">
           {scans.map((s) => {
             const findingLabel =
               s.result.acne.length === 0 ? "ไม่พบลักษณะสิว" : `พบ ${s.result.acne.length} ตำแหน่ง`;
             return (
-              <li key={s.id}>
+              <li key={s.id} className="h-full">
                 <Link
                   href={`/result/${s.id}`}
-                  className="flex items-center justify-between rounded-card border border-sand-300 bg-surface p-4 hover:border-teal-400 transition-colors"
+                  className="flex h-full items-center justify-between rounded-card border border-sand-300 bg-surface p-4 hover:border-teal-400 transition-colors"
                 >
                   <div>
                     <p className="text-sm font-medium text-ink">{SKIN_TYPE_LABEL_TH[s.result.skinType.label]}</p>

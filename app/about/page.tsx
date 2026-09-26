@@ -1,6 +1,6 @@
 export default function AboutPage() {
   return (
-    <div className="prose-sm max-w-none space-y-5">
+    <div className="prose-sm mx-auto max-w-2xl space-y-5">
       <h1 className="font-display text-2xl text-teal-900">เกี่ยวกับระบบนี้</h1>
 
       <p className="text-sm text-ink/75">
