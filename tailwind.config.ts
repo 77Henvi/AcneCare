@@ -35,8 +35,35 @@ const config: Config = {
         },
       },
       fontFamily: {
-        serif: ["'Playfair Display'", "'Cormorant Garamond'", "Georgia", "serif"],
-        sans: ["'Plus Jakarta Sans'", "'Inter'", "system-ui", "sans-serif"],
+        display: ["'Cinzel'", "'Cormorant Garamond'", "'Taviraj'", "serif"],
+        serif: ["'Playfair Display'", "'Cormorant Garamond'", "'Taviraj'", "serif"],
+        sans: ["'Plus Jakarta Sans'", "'Anuphan'", "system-ui", "sans-serif"],
+      },
+      animation: {
+        "float-slow": "float 6s ease-in-out infinite",
+        "float-delayed": "float 6s ease-in-out 3s infinite",
+        "pulse-glow": "pulseGlow 2.5s ease-in-out infinite",
+        "shimmer": "shimmer 2.5s linear infinite",
+        "radar-sweep": "radarSweep 4s ease-in-out infinite",
+      },
+      keyframes: {
+        float: {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-10px)" },
+        },
+        pulseGlow: {
+          "0%, 100%": { opacity: "0.6", transform: "scale(1)" },
+          "50%": { opacity: "1", transform: "scale(1.05)" },
+        },
+        shimmer: {
+          "0%": { backgroundPosition: "-200% 0" },
+          "100%": { backgroundPosition: "200% 0" },
+        },
+        radarSweep: {
+          "0%": { transform: "translateY(0%)", opacity: "0" },
+          "50%": { opacity: "0.8" },
+          "100%": { transform: "translateY(100%)", opacity: "0" },
+        },
       },
     },
   },

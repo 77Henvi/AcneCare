@@ -260,9 +260,11 @@ export function PromoFlatlayVisual() {
       
       {/* Medical Stethoscope / Capsule Badge */}
       <div className="absolute left-6 top-6 h-28 w-28 rounded-full border-4 border-white/80 bg-gradient-to-br from-[#FAF5EC] to-[#E9DFCF] shadow-lg flex items-center justify-center">
-        <div className="text-center">
-          <span className="block text-xl">🩺</span>
-          <span className="text-[9px] font-bold text-[#233B27]">DERMA RX</span>
+        <div className="text-center flex flex-col items-center">
+          <svg className="h-6 w-6 text-[#213C27] mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+          </svg>
+          <span className="font-display text-[9px] font-bold tracking-wider text-[#233B27]">DERMA RX</span>
         </div>
       </div>
 

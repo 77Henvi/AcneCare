@@ -1,18 +1,32 @@
 "use client";
 
 import React from "react";
+import { motion } from "framer-motion";
 import { CategoryVisual } from "./ProductVisuals";
 import { useTreatment } from "@/lib/treatmentContext";
 import { MEDICATIONS } from "@/lib/medications";
 
 const categories = [
-  { id: "whitehead", name: "สิวหัวขาว (หัวปิด)", type: "whitehead", medId: "salicylic-acid" },
-  { id: "blackhead", name: "สิวหัวดำ (หัวเปิด)", type: "blackhead", medId: "salicylic-acid" },
-  { id: "papule", name: "สิวตุ่มแดงอักเสบ", type: "papule", medId: "benzoyl-peroxide" },
-  { id: "pustule", name: "สิวตุ่มหนอง", type: "pustule", medId: "benzoyl-peroxide" },
-  { id: "nodule", name: "สิวหัวช้าง / ซีสต์", type: "nodule", medId: "adapalene" },
-  { id: "oily", name: "ผิวมัน & รูขุมขน", type: "oily", medId: "azelaic-acid" },
+  { id: "whitehead", name: "สิวหัวขาว (หัวปิด)", type: "whitehead", medId: "salicylic-acid", en: "WHITEHEADS" },
+  { id: "blackhead", name: "สิวหัวดำ (หัวเปิด)", type: "blackhead", medId: "salicylic-acid", en: "BLACKHEADS" },
+  { id: "papule", name: "สิวตุ่มแดงอักเสบ", type: "papule", medId: "benzoyl-peroxide", en: "PAPULES" },
+  { id: "pustule", name: "สิวตุ่มหนอง", type: "pustule", medId: "benzoyl-peroxide", en: "PUSTULES" },
+  { id: "nodule", name: "สิวหัวช้าง / ซีสต์", type: "nodule", medId: "adapalene", en: "NODULES / CYSTS" },
+  { id: "oily", name: "ผิวมัน & รูขุมขน", type: "oily", medId: "azelaic-acid", en: "OILY SKIN" },
 ];
+
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.09, delayChildren: 0.1 },
+  },
+};
+
+const item = {
+  hidden: { opacity: 0, y: 16 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
+};
 
 export default function CategorySection() {
   const { setSelectedMedication, showToast } = useTreatment();
@@ -26,44 +40,62 @@ export default function CategorySection() {
   };
 
   return (
-    <section id="acne-types" className="bg-[#FAF8F5] py-14 sm:py-16 lg:py-20">
+    <section id="acne-types" className="bg-[#FAF8F5] py-16 sm:py-20 lg:py-24 relative">
       <div className="mx-auto max-w-7xl px-4 sm:px-8">
-        {/* Section Heading */}
-        <div className="text-center mb-10 sm:mb-14">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#365A3D]">
+        {/* Section Heading with Motion */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-12 sm:mb-16"
+        >
+          <span className="font-display text-xs font-bold uppercase tracking-[0.25em] text-[#34593C]">
             ACNE TAXONOMY &amp; CLASSIFICATION
-          </p>
-          <h2 className="mt-1 font-serif text-2xl font-bold uppercase tracking-[0.16em] text-[#1E3022] sm:text-3xl md:text-4xl">
+          </span>
+          <h2 className="mt-1.5 font-display text-2xl font-bold uppercase tracking-[0.16em] text-[#16271A] sm:text-3xl md:text-4xl">
             จำแนกชนิดสิว 6 รูปแบบ
           </h2>
-          <p className="mt-2 text-xs text-[#3E5A44] sm:text-sm">
+          <p className="mt-2.5 text-xs text-[#3B5441] sm:text-sm max-w-xl mx-auto">
             คลิกที่ชนิดสิว เพื่อดูตัวยาและแนวทางการดูแลรักษาที่ถูกต้องตามหลักการแพทย์
           </p>
-          <div className="mx-auto mt-3 h-0.5 w-12 bg-[#365A3D]/40" />
-        </div>
+          <div className="mx-auto mt-4 h-0.5 w-16 bg-[#2B4E32]/40" />
+        </motion.div>
 
-        {/* 6 Category Grid */}
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 lg:grid-cols-6">
+        {/* 6 Category Grid with Stagger Reveal */}
+        <motion.div
+          variants={container}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-40px" }}
+          className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 lg:grid-cols-6"
+        >
           {categories.map((cat) => (
-            <div
+            <motion.div
               key={cat.id}
+              variants={item}
+              whileHover={{ y: -6, scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => handleCategoryClick(cat)}
-              className="group flex cursor-pointer flex-col overflow-hidden rounded-lg border border-[#E8E2D5] bg-[#F2EFE9] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg"
+              className="group flex cursor-pointer flex-col overflow-hidden rounded-xl border border-[#E4DCD0] bg-[#F4EFE6] transition-all duration-300 hover:border-[#213C27] hover:shadow-xl glass-card-glow"
             >
-              {/* Image Area */}
-              <div className="flex h-36 w-full items-center justify-center bg-[#F2ECE1] p-2 transition-colors group-hover:bg-[#EAE4D7] sm:h-44">
+              {/* Image Area with Zoom effect */}
+              <div className="flex h-36 w-full items-center justify-center bg-[#F1EAE0] p-2 transition-transform duration-500 group-hover:scale-105 sm:h-44">
                 <CategoryVisual type={cat.type} />
               </div>
 
-              {/* Bottom White Label */}
-              <div className="flex items-center justify-center bg-white py-3 px-2 text-center border-t border-[#E8E2D5]">
-                <span className="text-[11px] font-bold tracking-[0.05em] text-[#1C3322] transition-colors group-hover:text-[#38623E] sm:text-xs">
+              {/* Bottom Label */}
+              <div className="flex flex-col items-center justify-center bg-white py-3.5 px-2 text-center border-t border-[#E8E2D5] transition-colors group-hover:bg-[#FAF8F5]">
+                <span className="font-display text-[11px] font-bold tracking-[0.08em] text-[#172C1D] transition-colors group-hover:text-[#2E5536] sm:text-xs">
                   {cat.name}
                 </span>
+                <span className="text-[9px] font-semibold tracking-wider text-ink/40 mt-0.5">
+                  {cat.en}
+                </span>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

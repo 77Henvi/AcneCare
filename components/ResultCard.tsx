@@ -11,6 +11,7 @@ import {
 import { MEDICATIONS } from "@/lib/medications";
 import { useTreatment } from "@/lib/treatmentContext";
 import Disclaimer from "@/components/Disclaimer";
+import { PillCapsuleIcon, AlertTriangleIcon, SparklesIcon, ShieldCheckIcon } from "@/components/purelis/Icons";
 
 const severityDot: Record<string, string> = {
   none: "bg-ink/20",
@@ -49,18 +50,19 @@ export default function ResultCard({ scan }: { scan: ScanRecord }) {
     <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
       {/* 1. Skin Type Assessment */}
       <motion.section variants={item} className="rounded-xl border border-sand-300/80 bg-white p-5 sm:p-6 shadow-sm">
-        <p className="text-xs font-bold uppercase tracking-wider text-[#3D6345]">ลักษณะผิวที่ AI ประเมิน</p>
+        <span className="font-display text-xs font-bold uppercase tracking-wider text-[#3D6345]">ลักษณะผิวที่ AI ประเมิน</span>
         <div className="mt-2 flex items-baseline justify-between">
-          <p className="font-serif text-3xl font-bold text-[#1C3A23]">{SKIN_TYPE_LABEL_TH[result.skinType.label]}</p>
-          <span className="rounded-full bg-[#EAF2EC] px-3 py-1 text-xs font-semibold text-[#233B27]">
-            {Math.round(result.skinType.confidence * 100)}% Confidence
+          <p className="font-display text-3xl font-bold text-[#1C3A23]">{SKIN_TYPE_LABEL_TH[result.skinType.label]}</p>
+          <span className="inline-flex items-center gap-1 rounded-full bg-[#EAF2EC] px-3 py-1 text-xs font-semibold text-[#233B27]">
+            <SparklesIcon className="h-3 w-3 text-teal-700" />
+            <span>{Math.round(result.skinType.confidence * 100)}% Confidence</span>
           </span>
         </div>
       </motion.section>
 
       {/* 2. Detected Acne Findings */}
       <motion.section variants={item} className="rounded-xl border border-sand-300/80 bg-white p-5 sm:p-6 shadow-sm">
-        <p className="text-xs font-bold uppercase tracking-wider text-[#3D6345]">ลักษณะสิวที่ตรวจพบ</p>
+        <span className="font-display text-xs font-bold uppercase tracking-wider text-[#3D6345]">ลักษณะสิวที่ตรวจพบ</span>
         {result.acne.length === 0 ? (
           <p className="mt-3 text-sm text-ink/70">ไม่พบลักษณะสิวที่ชัดเจนในภาพ — สภาพผิวแลดูปกติ</p>
         ) : (
@@ -91,10 +93,10 @@ export default function ResultCard({ scan }: { scan: ScanRecord }) {
       {matchedMeds.length > 0 && (
         <motion.section variants={item} className="rounded-xl border border-[#233B27]/20 bg-gradient-to-br from-[#EAF2EC] to-[#F4F1EA] p-5 sm:p-6 shadow-sm">
           <div className="flex items-center gap-2">
-            <span className="text-base">💊</span>
-            <p className="text-xs font-bold uppercase tracking-wider text-[#1F3C26]">
+            <PillCapsuleIcon className="h-4.5 w-4.5 text-[#1F3C26]" />
+            <span className="font-display text-xs font-bold uppercase tracking-wider text-[#1F3C26]">
               ตัวยารักษาที่เหมาะกับสิวของคุณ
-            </p>
+            </span>
           </div>
           <p className="mt-1 text-xs text-[#3E5844]">
             คลิกที่ตัวยาเพื่อดูวิธีใช้ ลำดับการทา และข้อควรระวัง
@@ -102,10 +104,12 @@ export default function ResultCard({ scan }: { scan: ScanRecord }) {
 
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             {matchedMeds.map((med) => (
-              <div
+              <motion.div
                 key={med.id}
+                whileHover={{ scale: 1.02, y: -2 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => setSelectedMedication(med)}
-                className="cursor-pointer rounded-lg border border-sand-300/80 bg-white p-3.5 shadow-xs transition-all hover:border-[#233B27] hover:shadow-md"
+                className="cursor-pointer rounded-lg border border-sand-300/80 bg-white p-4 shadow-xs transition-all hover:border-[#233B27] hover:shadow-md"
               >
                 <div className="flex justify-between items-start">
                   <span className="rounded bg-[#EAF2EC] px-2 py-0.5 text-[10px] font-bold text-[#233B27]">
@@ -113,9 +117,9 @@ export default function ResultCard({ scan }: { scan: ScanRecord }) {
                   </span>
                   <span className="text-xs text-[#233B27] font-bold">ดูวิธีใช้ →</span>
                 </div>
-                <h4 className="mt-2 text-sm font-bold text-[#182C1B]">{med.name}</h4>
+                <h4 className="mt-2 font-display text-sm font-bold text-[#182C1B]">{med.name}</h4>
                 <p className="text-[11px] text-[#44614A] line-clamp-1">{med.category}</p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </motion.section>
@@ -123,7 +127,7 @@ export default function ResultCard({ scan }: { scan: ScanRecord }) {
 
       {/* 4. Routine Care Recommendations */}
       <motion.section variants={item} className="rounded-xl border border-sand-300/80 bg-white p-5 sm:p-6 shadow-sm">
-        <p className="text-xs font-bold uppercase tracking-wider text-[#3D6345]">คำแนะนำการดูแลผิวเบื้องต้น</p>
+        <span className="font-display text-xs font-bold uppercase tracking-wider text-[#3D6345]">คำแนะนำการดูแลผิวเบื้องต้น</span>
         <motion.ul variants={container} initial="hidden" animate="show" className="mt-3 space-y-2.5">
           {recommendations.map((r) => (
             <motion.li
@@ -135,7 +139,11 @@ export default function ResultCard({ scan }: { scan: ScanRecord }) {
                   : "bg-[#FAF8F5] border border-sand-200 text-[#253D2A]"
               }`}
             >
-              <span aria-hidden className="font-bold">{r.mandatory ? "⚠" : "✓"}</span>
+              {r.mandatory ? (
+                <AlertTriangleIcon className="h-4 w-4 text-red-600 flex-shrink-0 mt-0.5" />
+              ) : (
+                <ShieldCheckIcon className="h-4 w-4 text-[#233B27] flex-shrink-0 mt-0.5" />
+              )}
               <span>{r.text}</span>
             </motion.li>
           ))}
