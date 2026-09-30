@@ -13,14 +13,21 @@ export default function ResultPage({ params }: { params: { id: string } }) {
   }, [params.id]);
 
   if (scan === undefined) {
-    return <p className="text-sm text-ink/50">กำลังโหลด…</p>;
+    return (
+      <div className="mx-auto max-w-xl px-4 py-16 text-center">
+        <p className="font-serif text-base text-ink/60">กำลังโหลดผลการวิเคราะห์…</p>
+      </div>
+    );
   }
 
   if (scan === null) {
     return (
-      <div className="space-y-3">
-        <p className="text-sm text-ink/60">ไม่พบผลการสแกนนี้</p>
-        <Link href="/scan" className="text-sm text-teal-600 underline">
+      <div className="mx-auto max-w-xl px-4 py-16 text-center space-y-4">
+        <p className="font-serif text-lg text-ink/70">ไม่พบผลการสแกนนี้</p>
+        <Link
+          href="/scan"
+          className="inline-block bg-[#233B27] px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white"
+        >
           สแกนใหม่
         </Link>
       </div>
@@ -28,26 +35,29 @@ export default function ResultPage({ params }: { params: { id: string } }) {
   }
 
   return (
-    <div className="mx-auto max-w-xl space-y-6">
-      <div>
-        <h1 className="font-display text-2xl text-teal-900">ผลการวิเคราะห์ผิว</h1>
-        <p className="mt-1 text-xs text-ink/45">
-          {new Date(scan.createdAt).toLocaleString("th-TH")} · โมเดลเวอร์ชัน {scan.modelVersion}
+    <div className="mx-auto max-w-2xl px-4 py-8 sm:py-12 space-y-6">
+      <div className="border-b border-sand-300/80 pb-4">
+        <span className="text-xs font-bold uppercase tracking-wider text-[#3D6345]">DERMATOLOGY REPORT</span>
+        <h1 className="mt-1 font-serif text-3xl font-bold text-[#1C3221]">ผลการวิเคราะห์ผิว &amp; คำแนะนำยา</h1>
+        <p className="mt-1 text-xs text-ink/50">
+          ตรวจเมื่อ: {new Date(scan.createdAt).toLocaleString("th-TH")} · โมเดลเวอร์ชัน {scan.modelVersion}
         </p>
       </div>
+
       <ResultCard scan={scan} />
-      <div className="flex flex-wrap gap-3">
+
+      <div className="flex flex-wrap gap-3 pt-4">
         <Link
           href="/scan"
-          className="rounded-card bg-teal-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-teal-900 transition-colors"
+          className="bg-[#233B27] px-6 py-3 text-xs font-bold uppercase tracking-wider text-white shadow-sm hover:bg-[#182C1B] transition-colors"
         >
-          สแกนอีกครั้ง
+          📷 สแกนผิวอีกครั้ง
         </Link>
         <Link
           href="/history"
-          className="rounded-card border border-sand-300 px-4 py-2.5 text-sm font-medium text-ink/80 hover:border-teal-400 transition-colors"
+          className="border border-sand-300 bg-white px-6 py-3 text-xs font-bold uppercase tracking-wider text-ink/80 hover:border-[#233B27] hover:text-[#233B27] transition-colors"
         >
-          ดูประวัติ
+          ดูประวัติการตรวจ
         </Link>
       </div>
     </div>

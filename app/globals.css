@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Taviraj:wght@500;600;700&family=Anuphan:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -9,11 +9,32 @@ html {
 }
 
 body {
-  background-color: theme("colors.canvas");
-  color: theme("colors.ink");
+  background-color: #FAF8F5;
+  color: #1A221E;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  overflow-x: hidden;
 }
 
-:focus-visible {
-  outline: 2px solid theme("colors.teal.600");
-  outline-offset: 2px;
+::selection {
+  background-color: #27482E;
+  color: #FFFFFF;
+}
+
+/* Custom smooth scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F3EFE6;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #BFD8C4;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #95BFA0;
 }

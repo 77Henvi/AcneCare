@@ -1,44 +1,42 @@
 import type { Config } from "tailwindcss";
 
-// Design tokens — a calm clinical palette (not the generic cream/terracotta
-// or SaaS-card defaults): deep teal for trust/medical seriousness, a soft
-// warm sand background so the app doesn't feel cold, and a single amber
-// accent reserved ONLY for "needs attention" states (never decorative).
 const config: Config = {
   content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
-        ink: "#1B211E",
-        canvas: "#F7F5F0",
-        surface: "#FFFFFF",
-        teal: {
-          50: "#EEF5F2",
-          100: "#D7E8E1",
-          400: "#3C8272",
-          600: "#25604F",
-          900: "#123B30",
+        ink: "#1A221E",
+        cream: {
+          50: "#FCFBF8",
+          100: "#F9F7F2",
+          200: "#F3EFE6",
+          300: "#E9E3D5",
+          400: "#DCD4C3",
         },
-        sand: {
-          100: "#EFEAE0",
-          300: "#DCD3C0",
+        sage: {
+          50: "#F3F7F3",
+          100: "#E4EDE4",
+          200: "#D0DFD0",
+          300: "#ADC7AD",
+          400: "#80A880",
+          500: "#5D8A5D",
+          600: "#446C44",
         },
-        attention: {
-          50: "#FBF0E4",
-          400: "#C97A2E",
-          600: "#9C5A1A",
-        },
-        caution: {
-          50: "#FBEAEA",
-          500: "#B5423A",
+        olive: {
+          50: "#F2F6F3",
+          100: "#DFECE1",
+          200: "#BFD8C4",
+          300: "#95BFA0",
+          600: "#2F5838",
+          700: "#27482E",
+          800: "#213C27",
+          900: "#1A301F",
+          950: "#132317",
         },
       },
       fontFamily: {
-        sans: ["'Anuphan'", "system-ui", "sans-serif"],
-        display: ["'Fraunces'", "'Taviraj'", "serif"],
-      },
-      borderRadius: {
-        card: "14px",
+        serif: ["'Playfair Display'", "'Cormorant Garamond'", "Georgia", "serif"],
+        sans: ["'Plus Jakarta Sans'", "'Inter'", "system-ui", "sans-serif"],
       },
     },
   },

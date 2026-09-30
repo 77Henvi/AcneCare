@@ -39,7 +39,6 @@ export default function ScanPage() {
     setStage("analyzing");
     try {
       const result = await activePredictor.predict(canvas);
-      // overwrite the mock's own quality score with the real client-side check
       result.imageQuality = quality;
 
       const recommendations = buildRecommendations(result);
@@ -58,11 +57,12 @@ export default function ScanPage() {
   }
 
   return (
-    <div className="mx-auto max-w-xl space-y-6">
-      <div>
-        <h1 className="font-display text-2xl text-teal-900">สแกนผิว</h1>
-        <p className="mt-1 text-sm text-ink/65">
-          หันหน้าตรง อยู่ในที่มีแสงเพียงพอ ไม่ใส่หน้ากากหรือฟิลเตอร์
+    <div className="mx-auto max-w-xl px-4 py-8 sm:py-12 space-y-6">
+      <div className="text-center sm:text-left">
+        <span className="text-xs font-bold uppercase tracking-wider text-[#3D6345]">AI SKIN SCANNER</span>
+        <h1 className="mt-1 font-serif text-3xl font-bold text-[#1C3221]">สแกนผิวและตรวจจับสิว</h1>
+        <p className="mt-1 text-xs sm:text-sm text-ink/70">
+          หันหน้าตรง อยู่ในที่ที่มีแสงสว่างเพียงพอ ไม่สวมหน้ากากหรือใช้ฟิลเตอร์แต่งภาพ
         </p>
       </div>
 
@@ -74,9 +74,12 @@ export default function ScanPage() {
         )}
 
         {stage === "checking" && (
-          <motion.p key="checking" variants={fade} initial="hidden" animate="show" exit="exit" className="text-sm text-ink/60">
-            กำลังตรวจสอบคุณภาพภาพ…
-          </motion.p>
+          <motion.div key="checking" variants={fade} initial="hidden" animate="show" exit="exit" className="text-center py-6">
+            <div className="inline-block h-8 w-8 animate-spin rounded-full border-3 border-[#233B27] border-t-transparent mb-2" />
+            <p className="text-sm font-medium text-[#233B27]">
+              กำลังตรวจสอบคุณภาพภาพ (แสง, ความคมชัด, ระยะใบหน้า)…
+            </p>
+          </motion.div>
         )}
 
         {stage === "retake" && (
@@ -86,46 +89,51 @@ export default function ScanPage() {
             initial="hidden"
             animate="show"
             exit="exit"
-            className="rounded-card border border-caution-500/30 bg-caution-50 p-4 text-sm text-caution-500"
+            className="rounded-xl border border-red-200 bg-red-50/80 p-5 text-sm text-red-800 space-y-3"
           >
-            <p className="font-medium">ไม่สามารถวิเคราะห์ได้อย่างแม่นยำ กรุณาถ่ายภาพใหม่</p>
-            <ul className="mt-2 list-disc pl-5">
+            <p className="font-bold flex items-center gap-2">
+              <span>⚠️</span> ไม่สามารถวิเคราะห์ได้อย่างแม่นยำ กรุณาถ่ายภาพใหม่
+            </p>
+            <ul className="list-disc pl-5 text-xs space-y-1 text-red-700">
               {qualityReasons.map((r) => (
                 <li key={r}>{QUALITY_REASON_TH[r] ?? r}</li>
               ))}
             </ul>
             <button
               onClick={() => setStage("capture")}
-              className="mt-3 rounded-card bg-caution-500 px-3 py-1.5 text-xs font-medium text-white"
+              className="rounded bg-red-700 px-4 py-2 text-xs font-bold uppercase tracking-wider text-white hover:bg-red-800"
             >
-              ลองใหม่
+              ถ่ายภาพใหม่อีกครั้ง
             </button>
           </motion.div>
         )}
 
         {stage === "analyzing" && (
           <motion.div key="analyzing" variants={fade} initial="hidden" animate="show" exit="exit" className="space-y-4">
-            <div className="relative aspect-square w-full overflow-hidden rounded-card">
+            <div className="relative aspect-square w-full overflow-hidden rounded-2xl border-2 border-[#233B27]/30 shadow-lg">
               {previewUrl && (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={previewUrl} alt="ภาพที่ถ่าย" className="h-full w-full object-cover" />
               )}
               <ScanLineOverlay />
             </div>
-            <motion.p
-              className="text-center text-sm text-ink/60"
-              animate={{ opacity: [0.5, 1, 0.5] }}
-              transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-            >
-              กำลังวิเคราะห์ภาพด้วย AI…
-            </motion.p>
+            <div className="text-center py-2 space-y-1">
+              <motion.p
+                className="font-serif text-lg font-bold text-[#1F3924]"
+                animate={{ opacity: [0.6, 1, 0.6] }}
+                transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+              >
+                กำลังวิเคราะห์สภาพผิวและจำแนกชนิดสิวด้วย AI…
+              </motion.p>
+              <p className="text-xs text-ink/60">กำลังจับคู่ตัวยาและแนวทางการดูแลผิวที่ปลอดภัย</p>
+            </div>
           </motion.div>
         )}
 
         {stage === "error" && (
-          <motion.p key="error" variants={fade} initial="hidden" animate="show" exit="exit" className="text-sm text-caution-500">
+          <motion.div key="error" variants={fade} initial="hidden" animate="show" exit="exit" className="rounded-xl bg-red-50 p-4 text-sm text-red-700">
             เกิดข้อผิดพลาดระหว่างการวิเคราะห์ กรุณาลองใหม่อีกครั้ง
-          </motion.p>
+          </motion.div>
         )}
       </AnimatePresence>
     </div>
