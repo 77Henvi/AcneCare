@@ -11,7 +11,7 @@ import { motion } from "framer-motion";
  */
 export default function HeroScanVisual() {
   return (
-    <div className="relative aspect-square w-full max-w-[280px] mx-auto lg:mx-0">
+    <div className="relative aspect-square w-full">
       <svg viewBox="0 0 200 200" className="h-full w-full" aria-hidden>
         <defs>
           <clipPath id="face-clip">

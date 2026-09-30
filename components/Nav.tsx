@@ -15,12 +15,13 @@ export default function Nav() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-3 z-20 mx-auto flex max-w-4xl justify-center px-4 sm:top-4 sm:px-6 lg:px-8 2xl:max-w-5xl">
-      <div className="flex w-full items-center justify-between gap-2 rounded-full border border-sand-300/70 bg-surface/80 px-3.5 py-2 shadow-[0_1px_2px_rgba(27,33,30,0.04),0_8px_24px_-12px_rgba(27,33,30,0.15)] backdrop-blur-md sm:gap-4 sm:px-5 sm:py-2.5">
-        <Link href="/" className="font-display text-sm text-teal-900 sm:text-base">
+    <header className="sticky top-3 z-20 mx-auto flex w-full max-w-5xl justify-center px-4 sm:top-5 sm:px-6 lg:max-w-6xl lg:px-8">
+      <div className="flex w-full items-center justify-between gap-3 rounded-full border border-sand-300/80 bg-surface/85 px-4 py-2.5 shadow-[0_2px_16px_rgba(27,33,30,0.06)] backdrop-blur-md sm:px-6 sm:py-3">
+        <Link href="/" className="flex items-center gap-2 font-display text-sm font-semibold tracking-tight text-teal-900 sm:text-base">
+          <span className="inline-block h-2 w-2 rounded-full bg-teal-600"></span>
           skin scanner
         </Link>
-        <nav className="flex items-center gap-0.5 overflow-x-auto text-xs sm:gap-1 sm:text-sm">
+        <nav className="flex items-center gap-1 overflow-x-auto text-xs sm:gap-2 sm:text-sm">
           {links.map((l) => {
             const active = pathname === l.href;
             return (

@@ -24,11 +24,11 @@ export default function FloatingPreviewCard({ title, subtitle, delay = 0, classN
         scale: { duration: 0.5, delay },
         y: { duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: delay + 0.5 },
       }}
-      className={`rounded-card border border-sand-300 bg-surface/95 px-3.5 py-2.5 shadow-[0_10px_30px_-12px_rgba(27,33,30,0.25)] backdrop-blur-sm ${className}`}
+      className={`rounded-card border border-sand-300/80 bg-surface/95 px-3.5 py-2 shadow-[0_8px_24px_-8px_rgba(27,33,30,0.18)] backdrop-blur-sm whitespace-nowrap select-none ${className}`}
     >
-      <p className="text-[10px] uppercase tracking-wide text-ink/40">ตัวอย่าง</p>
-      <p className="text-sm font-medium text-teal-900">{title}</p>
-      <p className="text-xs text-ink/55">{subtitle}</p>
+      <p className="text-[10px] font-medium uppercase tracking-wider text-ink/40">ตัวอย่าง</p>
+      <p className="text-sm font-semibold text-teal-900">{title}</p>
+      <p className="text-xs text-ink/60">{subtitle}</p>
     </motion.div>
   );
 }

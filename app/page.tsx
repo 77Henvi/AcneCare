@@ -9,56 +9,64 @@ import FloatingPreviewCard from "@/components/FloatingPreviewCard";
 
 const container = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.09, delayChildren: 0.05 } },
+  show: { transition: { staggerChildren: 0.08, delayChildren: 0.05 } },
 };
 
 const item = {
   hidden: { opacity: 0, y: 14 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
+  show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] } },
 };
 
-// Honest, non-clinical facts about the system itself — never a fabricated
-// accuracy/percentage claim, per the design doc's medical-safety guardrail.
+// Honest, non-clinical facts about the system itself
 const facts = [
   { value: "7", label: "ชนิดสิวตามหลักการแพทย์" },
   { value: "5", label: "บริเวณใบหน้าที่วิเคราะห์" },
-  { value: "0", label: "ภาพต้นฉบับที่ต้องอัปโหลดขึ้นเซิร์ฟเวอร์" },
+  { value: "0", label: "ภาพส่งขึ้นเซิร์ฟเวอร์ (ปลอดภัย)" },
 ];
 
 export default function LandingPage() {
   return (
-    <div className="space-y-14 sm:space-y-20">
+    <div className="space-y-10 sm:space-y-14 lg:space-y-16">
       {/* ── Hero ─────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden rounded-[1.75rem] border border-sand-300/60 bg-teal-50/40 px-5 py-10 sm:rounded-[2.25rem] sm:px-10 sm:py-14 lg:px-14 lg:py-16 2xl:px-20 2xl:py-20">
-        <div className="grid items-center gap-12 lg:grid-cols-[1.2fr_1fr] lg:gap-10 xl:gap-16">
-          <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
-            <motion.p variants={item} className="text-xs font-medium uppercase tracking-[0.15em] text-teal-600 sm:text-sm">
-              AI Skin Analysis — ต้นแบบ
-            </motion.p>
+      <section className="relative overflow-hidden rounded-[2rem] border border-sand-300/80 bg-gradient-to-br from-teal-50/70 via-teal-50/40 to-sand-100/30 p-6 sm:p-10 lg:p-12 xl:p-14 shadow-[0_4px_24px_-10px_rgba(27,33,30,0.05)]">
+        <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-8 xl:gap-12">
+          {/* Left Content Column (7 cols on lg) */}
+          <motion.div
+            variants={container}
+            initial="hidden"
+            animate="show"
+            className="space-y-6 sm:space-y-7 lg:col-span-7"
+          >
+            <motion.div variants={item} className="inline-flex items-center gap-2 rounded-full border border-teal-600/20 bg-teal-50/80 px-3.5 py-1 text-xs font-medium text-teal-900 shadow-sm backdrop-blur-sm">
+              <span className="h-1.5 w-1.5 rounded-full bg-teal-600 animate-pulse"></span>
+              <span>AI Skin Analysis — ต้นแบบ</span>
+            </motion.div>
 
-            <motion.h1 variants={item} className="text-balance leading-[1.3] sm:leading-[1.25]">
-              <span className="block font-display text-4xl font-medium text-teal-900 sm:text-5xl lg:text-6xl 2xl:text-7xl">
+            <motion.h1 variants={item} className="font-display tracking-tight text-teal-900">
+              <span className="block text-3xl font-medium sm:text-4xl lg:text-5xl">
                 รู้จัก
               </span>
-              <span className="block font-display text-5xl font-bold tracking-tight text-teal-600 sm:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl">
+              <span className="block text-4xl font-bold text-teal-600 sm:text-5xl lg:text-6xl my-0.5">
                 ผิวคุณ
               </span>
-              <span className="block font-display text-4xl font-medium text-teal-900 sm:text-5xl lg:text-6xl 2xl:text-7xl">
+              <span className="block text-3xl font-medium sm:text-4xl lg:text-5xl">
                 ให้ลึกขึ้น
               </span>
             </motion.h1>
 
-            <motion.p variants={item} className="max-w-md text-sm text-ink/70 sm:text-base">
+            <motion.p variants={item} className="max-w-xl text-sm leading-relaxed text-ink/75 sm:text-base">
               ถ่ายรูปหน้า แล้วให้ AI ช่วยประเมินลักษณะผิวและลักษณะสิวเบื้องต้น พร้อมคำแนะนำการดูแลผิวที่ปลอดภัย
-              — ไม่ใช่เครื่องมือวินิจฉัยโรคและไม่ทดแทนคำแนะนำของแพทย์
+              <span className="mt-2 block text-xs text-ink/55">
+                * ไม่ใช่เครื่องมือวินิจฉัยโรคทางการแพทย์ และไม่ทดแทนคำแนะนำของแพทย์ผู้เชี่ยวชาญ
+              </span>
             </motion.p>
 
-            <motion.div variants={item} className="flex flex-wrap items-center gap-x-4 gap-y-2 pt-1">
+            <motion.div variants={item} className="flex flex-wrap items-center gap-3 pt-1 sm:gap-4">
               <Link href="/scan" className="inline-block">
                 <motion.span
-                  whileHover={{ scale: 1.04 }}
-                  whileTap={{ scale: 0.97 }}
-                  className="inline-flex items-center gap-2 rounded-card bg-teal-600 px-6 py-3.5 text-sm font-medium text-white shadow-[0_10px_24px_-8px_rgba(37,96,79,0.55)] hover:bg-teal-900 transition-colors"
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="inline-flex items-center gap-2 rounded-card bg-teal-600 px-6 py-3.5 text-sm font-semibold text-white shadow-[0_8px_20px_-6px_rgba(37,96,79,0.45)] hover:bg-teal-900 transition-colors cursor-pointer"
                 >
                   เริ่มสแกนผิว
                   <span aria-hidden>→</span>
@@ -66,47 +74,49 @@ export default function LandingPage() {
               </Link>
               <Link
                 href="/about"
-                className="rounded-card border border-teal-900/15 px-5 py-3.5 text-sm font-medium text-ink/70 hover:border-teal-400 hover:text-teal-600 transition-colors"
+                className="rounded-card border border-teal-900/20 bg-surface/70 px-5 py-3.5 text-sm font-medium text-ink/80 hover:border-teal-600 hover:text-teal-900 hover:bg-surface transition-all"
               >
                 เกี่ยวกับความปลอดภัย
               </Link>
             </motion.div>
 
-            <motion.dl variants={item} className="grid max-w-md grid-cols-3 gap-3 border-t border-sand-300/80 pt-6 sm:gap-4">
+            <motion.dl variants={item} className="grid grid-cols-3 gap-3 border-t border-sand-300/80 pt-6 sm:gap-6 max-w-xl">
               {facts.map((f) => (
-                <div key={f.label}>
+                <div key={f.label} className="space-y-1">
                   <dt className="sr-only">{f.label}</dt>
-                  <dd className="font-display text-xl text-teal-900 sm:text-2xl">{f.value}</dd>
-                  <dd className="mt-0.5 text-[11px] leading-snug text-ink/55 sm:text-xs">{f.label}</dd>
+                  <dd className="font-display text-2xl font-bold text-teal-900 sm:text-3xl">{f.value}</dd>
+                  <dd className="text-[11px] font-medium leading-snug text-ink/65 sm:text-xs">{f.label}</dd>
                 </div>
               ))}
             </motion.dl>
           </motion.div>
 
-          {/* ── Visual side: blobs + scan visual + floating chips ─────── */}
-          <div className="relative mx-auto flex w-full max-w-[300px] items-center justify-center py-6 lg:max-w-none lg:py-0">
-            <HeroBlobBackground />
+          {/* Right Visual Stage (5 cols on lg) */}
+          <div className="relative flex items-center justify-center lg:col-span-5">
+            <div className="relative flex w-full max-w-[320px] sm:max-w-[360px] lg:max-w-[380px] items-center justify-center p-4 sm:p-6">
+              <HeroBlobBackground />
 
-            <motion.div
-              initial={{ opacity: 0, scale: 0.92 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
-              className="w-full max-w-[220px] sm:max-w-[250px] lg:max-w-[270px] 2xl:max-w-[320px]"
-            >
-              <HeroScanVisual />
-            </motion.div>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.92 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
+                className="relative w-full max-w-[220px] sm:max-w-[260px]"
+              >
+                <HeroScanVisual />
+              </motion.div>
 
-            {/* rotating badge — top-right, hidden on the smallest screens to avoid clutter */}
-            <div className="absolute -right-1 -top-1 hidden sm:block lg:-right-3 lg:top-2">
-              <RotatingBadge />
-            </div>
+              {/* rotating badge — top-right */}
+              <div className="absolute -top-2 -right-2 sm:-top-3 sm:-right-3 z-10">
+                <RotatingBadge />
+              </div>
 
-            {/* floating example-output chips — desktop/tablet only; mobile keeps the hero clean */}
-            <div className="absolute -left-2 bottom-6 hidden md:block lg:-left-8 lg:bottom-10">
-              <FloatingPreviewCard title="ผิวมัน · 84%" subtitle="ลักษณะผิวที่ AI ประเมิน" delay={0.7} />
-            </div>
-            <div className="absolute -right-2 bottom-0 hidden md:block lg:-right-6 lg:bottom-2">
-              <FloatingPreviewCard title="สิวตุ่มแดง" subtitle="แก้มซ้าย" delay={0.95} />
+              {/* floating example-output chips */}
+              <div className="absolute -left-2 bottom-6 sm:-left-4 sm:bottom-8 z-10">
+                <FloatingPreviewCard title="ผิวมัน · 84%" subtitle="ลักษณะผิวที่ AI ประเมิน" delay={0.7} />
+              </div>
+              <div className="absolute -right-2 -bottom-2 sm:-right-4 sm:bottom-0 z-10">
+                <FloatingPreviewCard title="สิวตุ่มแดง" subtitle="แก้มซ้าย" delay={0.95} />
+              </div>
             </div>
           </div>
         </div>
@@ -117,22 +127,37 @@ export default function LandingPage() {
         variants={container}
         initial="hidden"
         whileInView="show"
-        viewport={{ once: true, margin: "-60px" }}
+        viewport={{ once: true, margin: "-40px" }}
         className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
       >
         {[
-          { title: "ตรวจคุณภาพภาพ", body: "เช็กแสง ความเบลอ และขนาดใบหน้าก่อนวิเคราะห์" },
-          { title: "ประเมินลักษณะผิว", body: "จำแนกผิวมัน ผิวแห้ง ผิวผสม หรือผิวปกติ" },
-          { title: "ประเมินลักษณะสิว", body: "แยกชนิดสิวตามหลักการแพทย์ พร้อมคำแนะนำที่เหมาะสม" },
+          {
+            num: "01",
+            title: "ตรวจคุณภาพภาพ",
+            body: "เช็กระดับแสง ความคมชัด และระยะใบหน้าก่อนส่งวิเคราะห์ เพื่อความแม่นยำสูงสุด",
+          },
+          {
+            num: "02",
+            title: "ประเมินลักษณะผิว",
+            body: "จำแนกสภาพผิว (ผิวมัน ผิวแห้ง ผิวผสม หรือผิวธรรมดา) ด้วยระบบ AI Computer Vision",
+          },
+          {
+            num: "03",
+            title: "ประเมินลักษณะสิว",
+            body: "จำแนก 7 ชนิดสิวตามหลักการแพทย์ผิวหนัง พร้อมแนวทางดูแลผิวที่ปลอดภัยและถูกวิธี",
+          },
         ].map((f) => (
           <motion.div
             key={f.title}
             variants={item}
             whileHover={{ y: -3, borderColor: "#3C8272" }}
-            className="rounded-card border border-sand-300 bg-surface p-5 transition-colors"
+            className="group rounded-card border border-sand-300/80 bg-surface p-5 sm:p-6 shadow-sm transition-all hover:shadow-md hover:border-teal-400"
           >
-            <h2 className="font-medium text-teal-900">{f.title}</h2>
-            <p className="mt-1.5 text-sm text-ink/65">{f.body}</p>
+            <span className="font-display text-xs font-bold tracking-widest text-teal-600/70">{f.num}</span>
+            <h2 className="mt-1 font-display text-base font-semibold text-teal-900 group-hover:text-teal-600 transition-colors">
+              {f.title}
+            </h2>
+            <p className="mt-2 text-xs leading-relaxed text-ink/70 sm:text-sm">{f.body}</p>
           </motion.div>
         ))}
       </motion.section>
