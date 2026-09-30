@@ -29,21 +29,21 @@ export default function LandingPage() {
   return (
     <div className="space-y-14 sm:space-y-20">
       {/* ── Hero ─────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden rounded-[1.75rem] border border-sand-300/60 bg-teal-50/40 px-5 py-10 sm:rounded-[2.25rem] sm:px-10 sm:py-14 lg:px-14 lg:py-16">
+      <section className="relative overflow-hidden rounded-[1.75rem] border border-sand-300/60 bg-teal-50/40 px-5 py-10 sm:rounded-[2.25rem] sm:px-10 sm:py-14 lg:px-14 lg:py-16 2xl:px-20 2xl:py-20">
         <div className="grid items-center gap-12 lg:grid-cols-[1.2fr_1fr] lg:gap-10 xl:gap-16">
           <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
             <motion.p variants={item} className="text-xs font-medium uppercase tracking-[0.15em] text-teal-600 sm:text-sm">
               AI Skin Analysis — ต้นแบบ
             </motion.p>
 
-            <motion.h1 variants={item} className="text-balance leading-[0.98]">
-              <span className="block font-display text-4xl font-medium text-teal-900 sm:text-5xl lg:text-6xl">
+            <motion.h1 variants={item} className="text-balance leading-[1.3] sm:leading-[1.25]">
+              <span className="block font-display text-4xl font-medium text-teal-900 sm:text-5xl lg:text-6xl 2xl:text-7xl">
                 รู้จัก
               </span>
-              <span className="block font-display text-5xl font-bold tracking-tight text-teal-600 sm:text-6xl lg:text-7xl xl:text-8xl">
+              <span className="block font-display text-5xl font-bold tracking-tight text-teal-600 sm:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl">
                 ผิวคุณ
               </span>
-              <span className="block font-display text-4xl font-medium text-teal-900 sm:text-5xl lg:text-6xl">
+              <span className="block font-display text-4xl font-medium text-teal-900 sm:text-5xl lg:text-6xl 2xl:text-7xl">
                 ให้ลึกขึ้น
               </span>
             </motion.h1>
@@ -91,7 +91,7 @@ export default function LandingPage() {
               initial={{ opacity: 0, scale: 0.92 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
-              className="w-full max-w-[220px] sm:max-w-[250px] lg:max-w-[270px]"
+              className="w-full max-w-[220px] sm:max-w-[250px] lg:max-w-[270px] 2xl:max-w-[320px]"
             >
               <HeroScanVisual />
             </motion.div>
