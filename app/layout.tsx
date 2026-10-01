@@ -1,18 +1,27 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Nav from "@/components/Nav";
+import { TreatmentProvider } from "@/lib/treatmentContext";
+import AnnouncementBar from "@/components/purelis/AnnouncementBar";
+import Navbar from "@/components/purelis/Navbar";
+import Footer from "@/components/purelis/Footer";
+import MedicationDrawer from "@/components/purelis/MedicationDrawer";
 
 export const metadata: Metadata = {
-  title: "Skin Scanner — AI Skin Analysis",
-  description: "ประเมินลักษณะผิวและสิวเบื้องต้นด้วย AI",
+  title: "AcneCare AI — ประเมินผิวและสิวเบื้องต้น พร้อมจับคู่ตัวยารักษา",
+  description: "ตรวจวิเคราะห์สิว 7 ชนิดและสภาพผิวด้วย AI พร้อมจับคู่ตัวยาและเวชสำอางที่เหมาะสมตามหลักการแพทย์ผิวหนัง",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="th">
-      <body className="font-sans antialiased">
-        <Nav />
-        <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">{children}</main>
+    <html lang="th" className="scroll-smooth">
+      <body className="min-h-screen bg-[#FAF8F5] font-sans antialiased text-[#1A221E] selection:bg-[#27482E] selection:text-white">
+        <TreatmentProvider>
+          <AnnouncementBar />
+          <Navbar />
+          <main className="min-h-[calc(100vh-280px)]">{children}</main>
+          <Footer />
+          <MedicationDrawer />
+        </TreatmentProvider>
       </body>
     </html>
   );

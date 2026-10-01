@@ -9,13 +9,14 @@ import { checkImageQuality, QUALITY_REASON_TH } from "@/lib/quality-check";
 import { activePredictor } from "@/lib/inference";
 import { buildRecommendations } from "@/lib/recommendation/engine";
 import { newScanId, saveScan } from "@/lib/storage/scans";
+import { AlertTriangleIcon, CameraScanIcon, SparklesIcon } from "@/components/purelis/Icons";
 
 type Stage = "capture" | "checking" | "retake" | "analyzing" | "error";
 
 const fade = {
-  hidden: { opacity: 0, y: 8 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.35, ease: [0.22, 1, 0.36, 1] } },
-  exit: { opacity: 0, y: -8, transition: { duration: 0.2 } },
+  hidden: { opacity: 0, y: 12 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] } },
+  exit: { opacity: 0, y: -12, transition: { duration: 0.25 } },
 };
 
 export default function ScanPage() {
@@ -39,7 +40,6 @@ export default function ScanPage() {
     setStage("analyzing");
     try {
       const result = await activePredictor.predict(canvas);
-      // overwrite the mock's own quality score with the real client-side check
       result.imageQuality = quality;
 
       const recommendations = buildRecommendations(result);
@@ -58,11 +58,12 @@ export default function ScanPage() {
   }
 
   return (
-    <div className="mx-auto max-w-xl space-y-6">
-      <div>
-        <h1 className="font-display text-2xl text-teal-900">สแกนผิว</h1>
-        <p className="mt-1 text-sm text-ink/65">
-          หันหน้าตรง อยู่ในที่มีแสงเพียงพอ ไม่ใส่หน้ากากหรือฟิลเตอร์
+    <div className="mx-auto max-w-xl px-4 py-8 sm:py-12 space-y-6">
+      <div className="text-center sm:text-left">
+        <span className="font-display text-xs font-bold uppercase tracking-wider text-[#3D6345]">AI SKIN SCANNER</span>
+        <h1 className="mt-1 font-display text-3xl font-bold text-[#1C3221]">สแกนผิวและตรวจจับสิว</h1>
+        <p className="mt-1 text-xs sm:text-sm text-ink/70">
+          หันหน้าตรง อยู่ในที่ที่มีแสงสว่างเพียงพอ ไม่สวมหน้ากากหรือใช้ฟิลเตอร์แต่งภาพ
         </p>
       </div>
 
@@ -74,9 +75,12 @@ export default function ScanPage() {
         )}
 
         {stage === "checking" && (
-          <motion.p key="checking" variants={fade} initial="hidden" animate="show" exit="exit" className="text-sm text-ink/60">
-            กำลังตรวจสอบคุณภาพภาพ…
-          </motion.p>
+          <motion.div key="checking" variants={fade} initial="hidden" animate="show" exit="exit" className="text-center py-8">
+            <div className="inline-block h-9 w-9 animate-spin rounded-full border-3 border-[#213C27] border-t-transparent mb-3" />
+            <p className="font-display text-sm font-bold text-[#213C27]">
+              กำลังตรวจสอบคุณภาพภาพ (แสง, ความคมชัด, ระยะใบหน้า)…
+            </p>
+          </motion.div>
         )}
 
         {stage === "retake" && (
@@ -86,46 +90,54 @@ export default function ScanPage() {
             initial="hidden"
             animate="show"
             exit="exit"
-            className="rounded-card border border-caution-500/30 bg-caution-50 p-4 text-sm text-caution-500"
+            className="rounded-2xl border border-red-200 bg-red-50/85 p-6 text-sm text-red-800 space-y-3.5 shadow-sm"
           >
-            <p className="font-medium">ไม่สามารถวิเคราะห์ได้อย่างแม่นยำ กรุณาถ่ายภาพใหม่</p>
-            <ul className="mt-2 list-disc pl-5">
+            <div className="font-display font-bold flex items-center gap-2 text-base text-red-900">
+              <AlertTriangleIcon className="h-5 w-5 text-red-600 flex-shrink-0" />
+              <span>ไม่สามารถวิเคราะห์ได้อย่างแม่นยำ กรุณาถ่ายภาพใหม่</span>
+            </div>
+            <ul className="list-disc pl-5 text-xs space-y-1 text-red-700">
               {qualityReasons.map((r) => (
                 <li key={r}>{QUALITY_REASON_TH[r] ?? r}</li>
               ))}
             </ul>
-            <button
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => setStage("capture")}
-              className="mt-3 rounded-card bg-caution-500 px-3 py-1.5 text-xs font-medium text-white"
+              className="rounded-none bg-red-700 px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-white hover:bg-red-800 shadow"
             >
-              ลองใหม่
-            </button>
+              ถ่ายภาพใหม่อีกครั้ง
+            </motion.button>
           </motion.div>
         )}
 
         {stage === "analyzing" && (
-          <motion.div key="analyzing" variants={fade} initial="hidden" animate="show" exit="exit" className="space-y-4">
-            <div className="relative aspect-square w-full overflow-hidden rounded-card">
+          <motion.div key="analyzing" variants={fade} initial="hidden" animate="show" exit="exit" className="space-y-5">
+            <div className="relative aspect-square w-full overflow-hidden rounded-2xl border-2 border-[#233B27]/40 shadow-2xl">
               {previewUrl && (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={previewUrl} alt="ภาพที่ถ่าย" className="h-full w-full object-cover" />
               )}
               <ScanLineOverlay />
             </div>
-            <motion.p
-              className="text-center text-sm text-ink/60"
-              animate={{ opacity: [0.5, 1, 0.5] }}
-              transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-            >
-              กำลังวิเคราะห์ภาพด้วย AI…
-            </motion.p>
+            <div className="text-center py-2 space-y-1.5">
+              <motion.p
+                className="font-display text-lg font-bold text-[#1F3924]"
+                animate={{ opacity: [0.6, 1, 0.6] }}
+                transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+              >
+                กำลังวิเคราะห์สภาพผิวและจำแนกชนิดสิวด้วย AI…
+              </motion.p>
+              <p className="text-xs text-ink/60">กำลังจับคู่ตัวยาและแนวทางการดูแลผิวที่ปลอดภัย</p>
+            </div>
           </motion.div>
         )}
 
         {stage === "error" && (
-          <motion.p key="error" variants={fade} initial="hidden" animate="show" exit="exit" className="text-sm text-caution-500">
+          <motion.div key="error" variants={fade} initial="hidden" animate="show" exit="exit" className="rounded-xl bg-red-50 p-4 text-sm text-red-700">
             เกิดข้อผิดพลาดระหว่างการวิเคราะห์ กรุณาลองใหม่อีกครั้ง
-          </motion.p>
+          </motion.div>
         )}
       </AnimatePresence>
     </div>
