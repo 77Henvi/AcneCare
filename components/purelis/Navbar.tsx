@@ -96,9 +96,9 @@ export default function Navbar() {
               ))}
             </div>
           </div>
-          <a href="#acne-types" className="transition-colors hover:text-olive-600">
+          <Link href="/acne-types" className="transition-colors hover:text-olive-600">
             ชนิดสิว 6 แบบ
-          </a>
+          </Link>
           <Link href="/history" className="transition-colors hover:text-olive-600">
             ประวัติการตรวจ
           </Link>
@@ -205,7 +205,7 @@ export default function Navbar() {
                 <span>สแกนผิวด้วย AI</span>
               </Link>
               <a href="#medications" onClick={() => setMobileMenuOpen(false)} className="py-1 hover:text-olive-700">คลังยารักษาสิว</a>
-              <a href="#acne-types" onClick={() => setMobileMenuOpen(false)} className="py-1 hover:text-olive-700">ชนิดสิว 6 รูปแบบ</a>
+              <Link href="/acne-types" onClick={() => setMobileMenuOpen(false)} className="py-1 hover:text-olive-700">ชนิดสิว 6 รูปแบบ</Link>
               <Link href="/history" onClick={() => setMobileMenuOpen(false)} className="py-1 hover:text-olive-700">ประวัติการตรวจ</Link>
               <Link href="/about" onClick={() => setMobileMenuOpen(false)} className="py-1 hover:text-olive-700">เกี่ยวกับระบบ</Link>
             </div>
