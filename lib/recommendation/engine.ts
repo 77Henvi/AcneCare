@@ -1,9 +1,10 @@
 import { PredictionResult } from "@/lib/inference/types";
+import { SkinType } from "@/lib/taxonomy";
 import { getAcneRecommendations, getSkinTypeRecommendations, Recommendation } from "./rules";
 
-export function buildRecommendations(result: PredictionResult): Recommendation[] {
+export function buildRecommendations(result: PredictionResult, skinType: SkinType): Recommendation[] {
   return [
-    ...getSkinTypeRecommendations(result.skinType),
+    ...getSkinTypeRecommendations(skinType),
     ...getAcneRecommendations(result.acne),
   ];
 }

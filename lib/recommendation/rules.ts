@@ -1,5 +1,5 @@
-import { AcneFinding, SkinTypePrediction } from "@/lib/inference/types";
-import { ACNE_SEVERITY } from "@/lib/taxonomy";
+import { AcneFinding } from "@/lib/inference/types";
+import { ACNE_SEVERITY, SkinType } from "@/lib/taxonomy";
 
 export interface Recommendation {
   ruleId: string;
@@ -12,8 +12,8 @@ export interface Recommendation {
  * added, may ONLY rephrase the `text` below; it must never originate new
  * advice or decide whether the "refer" rules fire.
  */
-export function getSkinTypeRecommendations(skinType: SkinTypePrediction): Recommendation[] {
-  switch (skinType.label) {
+export function getSkinTypeRecommendations(skinType: SkinType): Recommendation[] {
+  switch (skinType) {
     case "oily":
       return [
         { ruleId: "oily_gentle_cleanser", text: "ใช้ผลิตภัณฑ์ทำความสะอาดที่อ่อนโยน" },

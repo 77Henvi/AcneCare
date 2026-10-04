@@ -1,9 +1,4 @@
-import { AcneType, FaceRegion, SkinType } from "@/lib/taxonomy";
-
-export interface SkinTypePrediction {
-  label: SkinType;
-  confidence: number;
-}
+import { AcneType, FaceRegion } from "@/lib/taxonomy";
 
 export interface AcneFinding {
   type: AcneType;
@@ -20,7 +15,6 @@ export interface ImageQuality {
 export interface PredictionResult {
   modelVersion: string;
   imageQuality: ImageQuality;
-  skinType: SkinTypePrediction;
   acne: AcneFinding[];
 }
 

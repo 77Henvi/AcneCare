@@ -6,12 +6,21 @@ import { AnimatePresence, motion } from "framer-motion";
 import Camera from "@/components/Camera";
 import ScanLineOverlay from "@/components/ScanLineOverlay";
 import { checkImageQuality, QUALITY_REASON_TH } from "@/lib/quality-check";
+import { PredictionResult } from "@/lib/inference/types";
 import { activePredictor } from "@/lib/inference";
 import { buildRecommendations } from "@/lib/recommendation/engine";
 import { newScanId, saveScan } from "@/lib/storage/scans";
+import { SKIN_TYPE_LABEL_TH, SKIN_TYPES, SkinType } from "@/lib/taxonomy";
 import { AlertTriangleIcon, CameraScanIcon, SparklesIcon } from "@/components/purelis/Icons";
 
-type Stage = "capture" | "checking" | "retake" | "analyzing" | "error";
+type Stage = "capture" | "checking" | "retake" | "analyzing" | "skin-type" | "error";
+
+const SKIN_TYPE_GUIDANCE: Record<SkinType, string> = {
+  normal: "ไม่มันหรือแห้งตึงมากเป็นพิเศษ",
+  oily: "ผิวมันวาวหรือมันทั่วใบหน้า",
+  dry: "ผิวแห้ง ตึง หรือลอกเป็นขุย",
+  combination: "มันบริเวณทีโซน แต่แก้มแห้งหรือปกติ",
+};
 
 const fade = {
   hidden: { opacity: 0, y: 12 },
@@ -24,6 +33,8 @@ export default function ScanPage() {
   const [stage, setStage] = useState<Stage>("capture");
   const [qualityReasons, setQualityReasons] = useState<string[]>([]);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [pendingResult, setPendingResult] = useState<PredictionResult | null>(null);
+  const [selectedSkinType, setSelectedSkinType] = useState<SkinType | null>(null);
 
   async function handleCapture(canvas: HTMLCanvasElement) {
     setPreviewUrl(canvas.toDataURL("image/jpeg", 0.85));
@@ -41,20 +52,27 @@ export default function ScanPage() {
     try {
       const result = await activePredictor.predict(canvas);
       result.imageQuality = quality;
-
-      const recommendations = buildRecommendations(result);
-      const id = newScanId();
-      saveScan({
-        id,
-        createdAt: new Date().toISOString(),
-        modelVersion: result.modelVersion,
-        result,
-        recommendations,
-      });
-      router.push(`/result/${id}`);
+      setPendingResult(result);
+      setStage("skin-type");
     } catch {
       setStage("error");
     }
+  }
+
+  function handleSkinTypeSubmit() {
+    if (!pendingResult || !selectedSkinType) return;
+
+    const recommendations = buildRecommendations(pendingResult, selectedSkinType);
+    const id = newScanId();
+    saveScan({
+      id,
+      createdAt: new Date().toISOString(),
+      modelVersion: pendingResult.modelVersion,
+      skinType: selectedSkinType,
+      result: pendingResult,
+      recommendations,
+    });
+    router.push(`/result/${id}`);
   }
 
   return (
@@ -68,7 +86,7 @@ export default function ScanPage() {
       </div>
 
       <AnimatePresence mode="wait">
-        {stage !== "analyzing" && (
+        {stage !== "analyzing" && stage !== "skin-type" && (
           <motion.div key="camera" variants={fade} initial="hidden" animate="show" exit="exit">
             <Camera onCapture={handleCapture} />
           </motion.div>
@@ -127,11 +145,57 @@ export default function ScanPage() {
                 animate={{ opacity: [0.6, 1, 0.6] }}
                 transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
               >
-                กำลังวิเคราะห์สภาพผิวและจำแนกชนิดสิวด้วย AI…
+                กำลังตรวจจับลักษณะสิวด้วย AI…
               </motion.p>
-              <p className="text-xs text-ink/60">กำลังจับคู่ตัวยาและแนวทางการดูแลผิวที่ปลอดภัย</p>
+              <p className="text-xs text-ink/60">เมื่อสแกนเสร็จ คุณจะเลือกประเภทผิวด้วยตนเอง</p>
             </div>
           </motion.div>
+        )}
+
+        {stage === "skin-type" && (
+          <motion.section
+            key="skin-type"
+            variants={fade}
+            initial="hidden"
+            animate="show"
+            exit="exit"
+            className="space-y-5 border-t border-sand-300 pt-6"
+          >
+            <div>
+              <h2 className="font-display text-xl font-bold text-[#1C3221]">เลือกประเภทผิวของคุณ</h2>
+              <p className="mt-1 text-sm text-ink/65">ผลตรวจสิวพร้อมแล้ว โปรดเลือกตามลักษณะผิวที่พบเป็นประจำ</p>
+            </div>
+            <fieldset className="grid gap-3 sm:grid-cols-2">
+              <legend className="sr-only">ประเภทผิว</legend>
+              {SKIN_TYPES.map((type) => (
+                <button
+                  key={type}
+                  type="button"
+                  aria-pressed={selectedSkinType === type}
+                  onClick={() => setSelectedSkinType(type)}
+                  className={`min-h-20 border p-4 text-left transition-colors ${selectedSkinType === type
+                      ? "border-[#233B27] bg-[#EAF2EC] ring-1 ring-[#233B27]"
+                      : "border-sand-300 bg-white hover:border-[#567A5B]"
+                    }`}
+                >
+                  <span className="block font-display text-base font-bold text-[#1C3221]">
+                    {SKIN_TYPE_LABEL_TH[type]}
+                  </span>
+                  <span className="mt-1 block text-xs text-ink/60">{SKIN_TYPE_GUIDANCE[type]}</span>
+                </button>
+              ))}
+            </fieldset>
+            <motion.button
+              whileHover={{ scale: selectedSkinType ? 1.02 : 1 }}
+              whileTap={{ scale: selectedSkinType ? 0.98 : 1 }}
+              type="button"
+              disabled={!selectedSkinType}
+              onClick={handleSkinTypeSubmit}
+              className="w-full bg-[#213C27] px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-[#142618] disabled:cursor-not-allowed disabled:bg-ink/30"
+            >
+              ดูผลการสแกน
+            </motion.button>
+          </motion.section>
         )}
 
         {stage === "error" && (

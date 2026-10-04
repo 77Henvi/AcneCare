@@ -11,7 +11,7 @@ import {
 import { MEDICATIONS } from "@/lib/medications";
 import { useTreatment } from "@/lib/treatmentContext";
 import Disclaimer from "@/components/Disclaimer";
-import { PillCapsuleIcon, AlertTriangleIcon, SparklesIcon, ShieldCheckIcon } from "@/components/purelis/Icons";
+import { PillCapsuleIcon, AlertTriangleIcon, ShieldCheckIcon } from "@/components/purelis/Icons";
 
 const severityDot: Record<string, string> = {
   none: "bg-ink/20",
@@ -50,13 +50,11 @@ export default function ResultCard({ scan }: { scan: ScanRecord }) {
     <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
       {/* 1. Skin Type Assessment */}
       <motion.section variants={item} className="rounded-xl border border-sand-300/80 bg-white p-5 sm:p-6 shadow-sm">
-        <span className="font-display text-xs font-bold uppercase tracking-wider text-[#3D6345]">ลักษณะผิวที่ AI ประเมิน</span>
+        <span className="font-display text-xs font-bold uppercase tracking-wider text-[#3D6345]">ประเภทผิวที่คุณเลือก</span>
         <div className="mt-2 flex items-baseline justify-between">
-          <p className="font-display text-3xl font-bold text-[#1C3A23]">{SKIN_TYPE_LABEL_TH[result.skinType.label]}</p>
-          <span className="inline-flex items-center gap-1 rounded-full bg-[#EAF2EC] px-3 py-1 text-xs font-semibold text-[#233B27]">
-            <SparklesIcon className="h-3 w-3 text-teal-700" />
-            <span>{Math.round(result.skinType.confidence * 100)}% Confidence</span>
-          </span>
+          <p className="font-display text-3xl font-bold text-[#1C3A23]">
+            {scan.skinType ? SKIN_TYPE_LABEL_TH[scan.skinType] : "ยังไม่ได้ระบุ"}
+          </p>
         </div>
       </motion.section>
 
@@ -133,11 +131,10 @@ export default function ResultCard({ scan }: { scan: ScanRecord }) {
             <motion.li
               key={r.ruleId}
               variants={item}
-              className={`flex items-start gap-2.5 text-xs sm:text-sm p-3 rounded-lg ${
-                r.mandatory
-                  ? "bg-red-50 border border-red-200 text-red-700 font-semibold"
-                  : "bg-[#FAF8F5] border border-sand-200 text-[#253D2A]"
-              }`}
+              className={`flex items-start gap-2.5 text-xs sm:text-sm p-3 rounded-lg ${r.mandatory
+                ? "bg-red-50 border border-red-200 text-red-700 font-semibold"
+                : "bg-[#FAF8F5] border border-sand-200 text-[#253D2A]"
+                }`}
             >
               {r.mandatory ? (
                 <AlertTriangleIcon className="h-4 w-4 text-red-600 flex-shrink-0 mt-0.5" />

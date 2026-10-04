@@ -1,10 +1,12 @@
 import { PredictionResult } from "@/lib/inference/types";
+import { SkinType } from "@/lib/taxonomy";
 import { Recommendation } from "@/lib/recommendation/engine";
 
 export interface ScanRecord {
   id: string;
   createdAt: string;
   modelVersion: string;
+  skinType?: SkinType;
   result: PredictionResult;
   recommendations: Recommendation[];
 }
