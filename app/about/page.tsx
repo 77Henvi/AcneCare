@@ -67,7 +67,7 @@ export default function AboutPage() {
           <span>แหล่งอ้างอิงและมาตรฐานทางการแพทย์</span>
         </h2>
         <p className="text-xs sm:text-sm leading-relaxed text-ink/75 font-sans">
-          อนุกรมวิธานของชนิดสิว (7 Acne Types Taxonomy) และคำแนะนำการใช้ตัวยาเฉพาะที่ (Topical Active Ingredients เช่น Benzoyl Peroxide, Adapalene, BHA, Azelaic Acid) 
+          อนุกรมวิธานของชนิดสิว (6 Acne Types Taxonomy) และคำแนะนำการใช้ตัวยาเฉพาะที่ (Topical Active Ingredients เช่น Benzoyl Peroxide, Adapalene, BHA, Azelaic Acid) 
           อ้างอิงจากแนวทางการดูแลรักษาสิว โดยภาควิชาตจวิทยา คณะแพทยศาสตร์ศิริราชพยาบาล มหาวิทยาลัยมหิดล และสมาคมแพทย์ผิวหนังแห่งประเทศไทย
         </p>
       </motion.div>

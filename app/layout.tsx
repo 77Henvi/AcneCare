@@ -8,7 +8,7 @@ import MedicationDrawer from "@/components/purelis/MedicationDrawer";
 
 export const metadata: Metadata = {
   title: "AcneCare AI — ประเมินผิวและสิวเบื้องต้น พร้อมจับคู่ตัวยารักษา",
-  description: "ตรวจวิเคราะห์สิว 7 ชนิดและสภาพผิวด้วย AI พร้อมจับคู่ตัวยาและเวชสำอางที่เหมาะสมตามหลักการแพทย์ผิวหนัง",
+  description: "ตรวจวิเคราะห์สิว 6 ชนิดและสภาพผิวด้วย AI พร้อมจับคู่ตัวยาและเวชสำอางที่เหมาะสมตามหลักการแพทย์ผิวหนัง",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

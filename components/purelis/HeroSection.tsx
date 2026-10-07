@@ -59,7 +59,7 @@ export default function HeroSection() {
             variants={item}
             className="max-w-lg text-sm leading-relaxed text-[#2C4132] sm:text-base font-sans"
           >
-            ตรวจประเมินลักษณะผิวและสิว 7 ชนิดด้วยระบบ AI จากภาพถ่าย พร้อมจับคู่ตัวยาและเวชสำอางที่เหมาะสมตามหลักการแพทย์ผิวหนัง
+            ตรวจประเมินลักษณะผิวและสิว 6 รูปแบบด้วยระบบ AI จากภาพถ่าย พร้อมจับคู่ตัวยาและเวชสำอางที่เหมาะสมตามหลักการแพทย์ผิวหนัง
           </motion.p>
 
           {/* Action Buttons with Spring Hover */}
