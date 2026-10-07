@@ -5,10 +5,10 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTreatment } from "@/lib/treatmentContext";
 import { MEDICATIONS } from "@/lib/medications";
-import { CameraScanIcon, HeartIcon, SparklesIcon } from "./Icons";
+import { CameraScanIcon } from "./Icons";
 
 export default function Navbar() {
-  const { savedTreatments, setSelectedMedication, showToast } = useTreatment();
+  const { setSelectedMedication, showToast } = useTreatment();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -67,16 +67,6 @@ export default function Navbar() {
           <Link href="/" className="text-olive-800 font-bold border-b-2 border-olive-800 pb-0.5">
             หน้าแรก
           </Link>
-          <Link
-            href="/scan"
-            className="transition-colors hover:text-olive-600 flex items-center gap-1.5 text-olive-700 font-bold"
-          >
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-teal-600"></span>
-            </span>
-            <span>สแกนผิว AI</span>
-          </Link>
           <div className="group relative">
             <a href="#medications" className="flex items-center gap-1 transition-colors hover:text-olive-600">
               คลังยารักษาสิว
@@ -107,7 +97,7 @@ export default function Navbar() {
           </Link>
         </nav>
 
-        {/* Right Actions: Search, Saved Treatments, Start Scan CTA */}
+        {/* Right Actions: Search, Start Scan CTA */}
         <div className="flex items-center gap-3 sm:gap-4 text-[#28382B]">
           {/* Search Button */}
           <motion.button
@@ -121,28 +111,6 @@ export default function Navbar() {
             <svg className="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
-          </motion.button>
-
-          {/* Saved Treatments Button */}
-          <motion.button
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.96 }}
-            onClick={() => {
-              if (savedTreatments.length > 0) {
-                const first = MEDICATIONS.find((m) => m.id === savedTreatments[0]);
-                if (first) setSelectedMedication(first);
-              } else {
-                showToast("ยังไม่มีตัวยาที่บันทึกไว้ ลองกดหัวใจที่ตัวยาด้านล่าง");
-              }
-            }}
-            className="relative flex items-center gap-1.5 rounded-full border border-sand-300 bg-[#FAF8F5] px-3.5 py-1.5 text-xs font-semibold text-[#1F3A24] hover:bg-white transition-all shadow-xs"
-            title="ตัวยาที่คุณบันทึกไว้"
-          >
-            <HeartIcon className="h-3.5 w-3.5 text-[#C83244]" filled={savedTreatments.length > 0} />
-            <span className="hidden sm:inline">ยาที่บันทึก</span>
-            <span className="rounded-full bg-[#E2ECE2] px-1.5 text-[10px] font-bold text-[#233B27]">
-              {savedTreatments.length}
-            </span>
           </motion.button>
 
           {/* Main CTA: Scan Skin */}

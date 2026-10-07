@@ -22,21 +22,14 @@ export default function AnnouncementBar() {
           transition={{ duration: 0.5 }}
           className="flex w-full items-center justify-center sm:w-auto sm:justify-start"
         >
-          <Link
-            href="/scan"
-            className="group inline-flex items-center gap-2 transition-opacity hover:opacity-95"
-          >
-            <span className="flex items-center justify-center h-4 w-4 rounded-full bg-white/15 text-[#A7D9B0] group-hover:rotate-12 transition-transform">
+          <div className="inline-flex items-center gap-2">
+            <span className="flex items-center justify-center h-4 w-4 rounded-full bg-white/15 text-[#A7D9B0]">
               <LeafIcon className="h-2.5 w-2.5" />
             </span>
-            <span className="font-display font-semibold tracking-wider text-[#A7D9B0]">AI Skin &amp; Acne Analysis v2.0</span>
+            <span className="font-display font-semibold tracking-wider text-[#A7D9B0]">AI Skin &amp; Acne Analysis</span>
             <span className="hidden opacity-40 sm:inline">|</span>
-            <span className="hidden sm:inline text-white/90">ตรวจประเมินผิวและจับคู่ยารักษาสิวมาตรฐานการแพทย์ฟรี</span>
-            <span className="inline-flex items-center gap-1 rounded bg-white/15 px-2 py-0.5 font-semibold text-[#A7D9B0] group-hover:bg-white/25 transition-colors">
-              <SparklesIcon className="h-3 w-3" />
-              <span>เริ่มสแกน</span>
-            </span>
-          </Link>
+            <span className="hidden sm:inline text-white/90">ตรวจประเมินผิวและจับคู่ยารักษาสิวมาตรฐานการแพทย์</span>
+          </div>
         </motion.div>
 
         {/* Right Info Badges */}

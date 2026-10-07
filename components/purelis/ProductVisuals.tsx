@@ -53,12 +53,6 @@ export function HeroProductTrio() {
       <BotanicalLeaves className="absolute -left-6 top-8 h-40 w-40 -rotate-12 opacity-90 sm:h-56 sm:w-56" />
       <BotanicalLeaves className="absolute -right-8 top-12 h-44 w-44 scale-x-[-1] rotate-12 opacity-85 sm:h-60 sm:w-60" />
 
-      {/* Floating AI Scan Hologram Target Overlay */}
-      <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 rounded-full border border-teal-600/30 bg-white/90 px-3.5 py-1 shadow-md backdrop-blur-md">
-        <span className="h-2 w-2 rounded-full bg-teal-600 animate-ping" />
-        <span className="text-[11px] font-bold tracking-wider text-[#1C3B24]">AI ACNE DETECTION READY</span>
-      </div>
-
       {/* Stone / Marble Podium Base */}
       <div className="absolute bottom-0 h-16 w-full max-w-[440px] rounded-[50%] bg-gradient-to-r from-[#D7D0C3] via-[#EDE8DE] to-[#CBC4B6] shadow-[0_20px_35px_-10px_rgba(40,60,45,0.25)] border-t border-white/60">
         <div className="absolute inset-x-8 top-2 h-8 rounded-[50%] bg-gradient-to-r from-white/40 via-white/70 to-white/30 blur-[2px]" />
