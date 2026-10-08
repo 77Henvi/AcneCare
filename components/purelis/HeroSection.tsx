@@ -59,7 +59,7 @@ export default function HeroSection() {
             variants={item}
             className="max-w-lg text-sm leading-relaxed text-[#2C4132] sm:text-base font-sans"
           >
-            ตรวจประเมินลักษณะผิวและสิว 7 ชนิดด้วยระบบ AI จากภาพถ่าย พร้อมจับคู่ตัวยาและเวชสำอางที่เหมาะสมตามหลักการแพทย์ผิวหนัง
+            ตรวจประเมินลักษณะผิวและสิว 6 ชนิดด้วยระบบ AI จากภาพถ่าย พร้อมแนะนำตัวยาและเวชสำอางที่เหมาะสมสำหรับการรักษาสิวเบื้องต้น
           </motion.p>
 
           {/* Action Buttons with Spring Hover */}
@@ -82,7 +82,7 @@ export default function HeroSection() {
                 className="inline-flex items-center justify-center gap-2 rounded-none border border-[#213C27]/40 bg-white/80 px-6 py-3.5 text-xs font-bold uppercase tracking-[0.16em] text-[#1D3622] shadow-xs backdrop-blur-sm transition-all hover:bg-white hover:border-[#213C27] cursor-pointer"
               >
                 <PillCapsuleIcon className="h-4 w-4 text-[#2E5536]" />
-                <span>ดูคลังยารักษาสิว</span>
+                <span>ดูข้อมูลตัวยารักษาสิว</span>
               </motion.span>
             </a>
           </motion.div>
@@ -91,7 +91,7 @@ export default function HeroSection() {
           <motion.div variants={item} className="flex flex-wrap items-center gap-4 pt-2 text-xs text-[#35523C] font-medium">
             <span className="flex items-center gap-1.5">
               <ShieldCheckIcon className="h-3.5 w-3.5 text-teal-700" />
-              <span>ความปลอดภัย 100% (Client-Side)</span>
+              <span>ปลอดภัย 100% (Client-Side)</span>
             </span>
             <span className="flex items-center gap-1.5">
               <SparklesIcon className="h-3.5 w-3.5 text-teal-700" />

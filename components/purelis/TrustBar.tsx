@@ -7,25 +7,26 @@ import { StethoscopeIcon, TargetCrosshairIcon, ShieldCheckIcon, PillCapsuleIcon 
 const trustItems = [
   {
     icon: <StethoscopeIcon className="h-5 w-5 text-[#213C27]" />,
-    title: "อิงหลักการแพทย์ผิวหนัง",
-    subtitle: "ภาควิชาตจวิทยา ศิริราช",
+    title: "อ้างอิงเอกสารทางการแพทย์",
+    subtitle: "ศิริราช · ขอนแก่น · รามาธิบดี",
   },
   {
     icon: <TargetCrosshairIcon className="h-5 w-5 text-[#213C27]" />,
-    title: "จำแนกสิว 7 ชนิด",
-    subtitle: "ตรวจจับตามตำแหน่ง 5 โซน",
+    title: "จำแนกสิว 6 ชนิด",
+    subtitle: "ตรวจตามตำแหน่ง 5 โซนบนใบหน้า",
   },
   {
     icon: <ShieldCheckIcon className="h-5 w-5 text-[#213C27]" />,
     title: "ประมวลผลบนเครื่อง (Client-Side)",
-    subtitle: "ไม่ส่งภาพขึ้นเซิร์ฟเวอร์ ปลอดภัย 100%",
+    subtitle: "ไม่ส่งภาพขึ้นเซิร์ฟเวอร์",
   },
   {
     icon: <PillCapsuleIcon className="h-5 w-5 text-[#213C27]" />,
-    title: "จับคู่ตัวยามาตรฐานการแพทย์",
-    subtitle: "BP, BHA, Adapalene, Azelaic",
+    title: "ข้อมูลตัวยาที่ใช้ในการรักษาสิว",
+    subtitle: "BPO, BHA, Adapalene, Azelaic Acid",
   },
 ];
+
 
 export default function TrustBar() {
   return (

@@ -8,7 +8,7 @@ import {
   FACE_REGION_LABEL_TH,
   SKIN_TYPE_LABEL_TH,
 } from "@/lib/taxonomy";
-import { MEDICATIONS } from "@/lib/medications";
+import { MEDICATIONS, MEDS_BY_ACNE_TYPE, TREATMENT_NOTES } from "@/lib/medications";
 import { useTreatment } from "@/lib/treatmentContext";
 import Disclaimer from "@/components/Disclaimer";
 import { PillCapsuleIcon, AlertTriangleIcon, SparklesIcon, ShieldCheckIcon } from "@/components/purelis/Icons";
@@ -64,7 +64,7 @@ export default function ResultCard({ scan }: { scan: ScanRecord }) {
       <motion.section variants={item} className="rounded-xl border border-sand-300/80 bg-white p-5 sm:p-6 shadow-sm">
         <span className="font-display text-xs font-bold uppercase tracking-wider text-[#3D6345]">ลักษณะสิวที่ตรวจพบ</span>
         {result.acne.length === 0 ? (
-          <p className="mt-3 text-sm text-ink/70">ไม่พบลักษณะสิวที่ชัดเจนในภาพ — สภาพผิวแลดูปกติ</p>
+          <p className="mt-3 text-sm text-ink/70">ไม่พบลักษณะสิวที่ชัดเจนในภาพ — สภาพผิวดูปกติ</p>
         ) : (
           <motion.ul variants={container} initial="hidden" animate="show" className="mt-4 space-y-3">
             {result.acne.map((f, i) => (
@@ -95,11 +95,11 @@ export default function ResultCard({ scan }: { scan: ScanRecord }) {
           <div className="flex items-center gap-2">
             <PillCapsuleIcon className="h-4.5 w-4.5 text-[#1F3C26]" />
             <span className="font-display text-xs font-bold uppercase tracking-wider text-[#1F3C26]">
-              ตัวยารักษาที่เหมาะกับสิวของคุณ
+              ตัวยาที่มักใช้กับสิวลักษณะนี้
             </span>
           </div>
           <p className="mt-1 text-xs text-[#3E5844]">
-            คลิกที่ตัวยาเพื่อดูวิธีใช้ ลำดับการทา และข้อควรระวัง
+            คลิกที่ตัวยาเพื่อดูวิธีใช้ ข้อควรระวัง และแหล่งอ้างอิง
           </p>
 
           <div className="mt-4 grid gap-3 sm:grid-cols-2">

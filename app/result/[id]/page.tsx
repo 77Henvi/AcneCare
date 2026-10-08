@@ -38,7 +38,7 @@ export default function ResultPage({ params }: { params: { id: string } }) {
     <div className="mx-auto max-w-2xl px-4 py-8 sm:py-12 space-y-6">
       <div className="border-b border-sand-300/80 pb-4">
         <span className="text-xs font-bold uppercase tracking-wider text-[#3D6345]">DERMATOLOGY REPORT</span>
-        <h1 className="mt-1 font-serif text-3xl font-bold text-[#1C3221]">ผลการวิเคราะห์ผิว &amp; คำแนะนำยา</h1>
+        <h1 className="mt-1 font-serif text-3xl font-bold text-[#1C3221]">ผลการวิเคราะห์ผิวและตัวยาแนะนำ</h1>
         <p className="mt-1 text-xs text-ink/50">
           ตรวจเมื่อ: {new Date(scan.createdAt).toLocaleString("th-TH")} · โมเดลเวอร์ชัน {scan.modelVersion}
         </p>

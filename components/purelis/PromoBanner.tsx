@@ -28,13 +28,13 @@ export default function PromoBanner() {
               </span>
 
               <h2 className="font-display text-3xl font-bold tracking-tight text-[#16271A] sm:text-4xl md:text-5xl leading-[1.18]">
-                จับคู่ตัวยารักษาสิวตรงจุด <br className="hidden sm:inline" />
-                ปลอดภัย อิงหลักการแพทย์
+                ข้อมูลตัวยารักษาสิวตามชนิดสิว <br className="hidden sm:inline" />
+                อ้างอิงเอกสารทางการแพทย์
               </h2>
 
               <p className="text-xs sm:text-sm leading-relaxed text-[#354D3B] max-w-lg font-sans">
                 ระบบ AI วิเคราะห์ความรุนแรงของสิว พร้อมให้คำแนะนำตัวยาทาภายนอก (Topical Treatments) 
-                ลำดับขั้นตอนการทา และข้อห้ามใช้ที่สตรีมีครรภ์ควรระวัง
+                วิธีใช้ และข้อควรระวังสำหรับสตรีมีครรภ์
               </p>
 
               <div className="pt-2">
@@ -45,7 +45,7 @@ export default function PromoBanner() {
                     className="inline-flex items-center gap-2 rounded-none bg-[#213C27] px-7 py-3.5 text-xs font-bold uppercase tracking-[0.18em] text-white shadow-md transition-all duration-300 hover:bg-[#142618] hover:shadow-xl sm:text-sm cursor-pointer"
                   >
                     <CameraScanIcon className="h-4 w-4 text-[#A7D9B0]" />
-                    <span>สแกนผิวหน้าเพื่อรับคำแนะนำยา</span>
+                    <span>สแกนผิวหน้าเพื่อดูข้อมูลตัวยา</span>
                   </motion.span>
                 </Link>
               </div>

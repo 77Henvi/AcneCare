@@ -188,7 +188,7 @@ export function CategoryVisual({ type }: { type: string }) {
             <rect x="25" y="40" width="70" height="70" rx="8" fill="#F4EFE6" stroke="#D3DFC4" strokeWidth="1" />
             <circle cx="60" cy="70" r="18" fill="#FFFFFF" stroke="#E2CDB5" strokeWidth="2" />
             <circle cx="60" cy="70" r="8" fill="#FBF8EE" />
-            <text x="60" y="102" textAnchor="middle" fill="#27482E" fontSize="6" fontWeight="bold">หัวปิด (Whitehead)</text>
+            <text x="60" y="102" textAnchor="middle" fill="#27482E" fontSize="6" fontWeight="bold">หัวหัวขาว (Whitehead)</text>
           </svg>
         </div>
       );
@@ -199,7 +199,7 @@ export function CategoryVisual({ type }: { type: string }) {
             <rect x="25" y="40" width="70" height="70" rx="8" fill="#F4EFE6" stroke="#D3DFC4" strokeWidth="1" />
             <circle cx="60" cy="70" r="18" fill="#FFFFFF" stroke="#3D453E" strokeWidth="2" />
             <circle cx="60" cy="70" r="9" fill="#222823" />
-            <text x="60" y="102" textAnchor="middle" fill="#27482E" fontSize="6" fontWeight="bold">หัวเปิด (Blackhead)</text>
+            <text x="60" y="102" textAnchor="middle" fill="#27482E" fontSize="6" fontWeight="bold">หัวหัวดำ (Blackhead)</text>
           </svg>
         </div>
       );

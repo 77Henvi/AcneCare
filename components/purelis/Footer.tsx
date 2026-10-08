@@ -36,9 +36,9 @@ export default function Footer() {
               </div>
               <div>
                 <h4 className="font-display text-xs font-bold uppercase tracking-wider text-[#16271A]">
-                  SIRIRAJ ACNE TAXONOMY
+                  Acne Therapark (ศิริราช)
                 </h4>
-                <p className="mt-0.5 text-xs text-[#3E5843]">อิงอนุกรมวิธานสิว ภาควิชาตจวิทยา ศิริราช</p>
+                <p className="mt-0.5 text-xs text-[#3E5843]">อิงข้อมูลชนิดสิวจากสื่อการเรียนรู้ ภาคตจวิทยา ศิริราช</p>
               </div>
             </div>
 
@@ -75,7 +75,7 @@ export default function Footer() {
               SUBSCRIBE TO DERMATOLOGY TIPS
             </h4>
             <p className="text-xs leading-relaxed text-[#3B5441]">
-              รับบทความความรู้เรื่องสิว ตัวยา การดูแลผิว และคำแนะนำจากแพทย์ผิวหนังเป็นประจำ
+              รับบทความความรู้เรื่องสิว ตัวยา และการดูแลผิวเป็นประจำ
             </p>
 
             <form onSubmit={handleSubscribe} className="flex max-w-sm flex-col gap-2 sm:flex-row">
@@ -91,7 +91,7 @@ export default function Footer() {
                 type="submit"
                 className="whitespace-nowrap bg-[#213C27] px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-white transition-colors hover:bg-[#15281A]"
               >
-                {subscribed ? "เรียบร้อย ✓" : "ติดตาม"}
+                {subscribed ? "เรียบร้อย ✓" : "สมัครรับ"}
               </button>
             </form>
 
@@ -122,14 +122,14 @@ export default function Footer() {
             </h4>
             <p className="text-xs leading-relaxed text-[#3B5441]">
               AcneCare เป็นระบบ AI ช่วยประเมินลักษณะผิวและชนิดสิวจากภาพถ่ายใบหน้าเบื้องต้น
-              พร้อมจับคู่ตัวยาและเวชสำอางตามหลักการแพทย์เพื่อการดูแลผิวที่ปลอดภัยและถูกวิธี
+              พร้อมข้อมูลตัวยารักษาสิวที่อ้างอิงเอกสารทางการแพทย์ เพื่อการดูแลสิวและผิวหน้าอย่างถูกต้องและปลอดภัย
             </p>
             <div>
               <Link
                 href="/about"
                 className="group inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-[#213C27] underline decoration-[#213C27]/40 underline-offset-4 hover:text-[#15281A]"
               >
-                <span>อ่านคู่มือความปลอดภัยและการแพทย์</span>
+                <span>อ่านข้อมูลและข้อจำกัดของระบบ</span>
                 <span className="transition-transform group-hover:translate-x-1">→</span>
               </Link>
             </div>
@@ -140,7 +140,7 @@ export default function Footer() {
       {/* Bottom Dark Copyright Bar */}
       <div className="bg-[#182F1D] py-4 text-white border-t border-white/10">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 text-[11px] font-medium tracking-wide sm:flex-row sm:px-8 sm:text-xs">
-          <p className="text-white/80">© 2025 AcneCare AI Dermatology. All Rights Reserved.</p>
+          <p className="text-white/80">© 2026 AcneCare AI Dermatology. All Rights Reserved.</p>
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-white/70">
             <Link href="/about" className="hover:text-white transition-colors">Medical Disclaimer</Link>
             <span className="opacity-40">|</span>

@@ -31,7 +31,7 @@ export default function AboutPage() {
         </span>
         <h1 className="mt-1 font-display text-3xl font-bold text-[#1C3221]">เกี่ยวกับระบบ AcneCare AI</h1>
         <p className="mt-1 text-xs sm:text-sm text-ink/70">
-          ระบบต้นแบบตรวจประเมินผิวและสิวเบื้องต้น พร้อมจับคู่ตัวยามาตรฐานทางการแพทย์
+          ระบบต้นแบบตรวจประเมินสิวเบื้องต้น พร้อมระบุข้อมูลตัวยาที่เหมาะกับคุณ
         </p>
       </motion.div>
 
@@ -61,16 +61,42 @@ export default function AboutPage() {
       </motion.div>
 
       {/* Reference Box */}
+      {/* Reference Box */}
       <motion.div variants={item} className="space-y-3.5 rounded-2xl border border-sand-300 bg-white p-6 sm:p-7 shadow-xs">
         <h2 className="font-display text-xl font-bold text-[#1C3221] flex items-center gap-2.5">
           <FileTextIcon className="h-5 w-5 text-teal-700" />
-          <span>แหล่งอ้างอิงและมาตรฐานทางการแพทย์</span>
+          <span>แหล่งอ้างอิงของข้อมูล</span>
         </h2>
         <p className="text-xs sm:text-sm leading-relaxed text-ink/75 font-sans">
-          อนุกรมวิธานของชนิดสิว (7 Acne Types Taxonomy) และคำแนะนำการใช้ตัวยาเฉพาะที่ (Topical Active Ingredients เช่น Benzoyl Peroxide, Adapalene, BHA, Azelaic Acid) 
-          อ้างอิงจากแนวทางการดูแลรักษาสิว โดยภาควิชาตจวิทยา คณะแพทยศาสตร์ศิริราชพยาบาล มหาวิทยาลัยมหิดล และสมาคมแพทย์ผิวหนังแห่งประเทศไทย
+          ข้อมูลชนิดสิวและตัวยาในระบบนี้รวบรวมจากเอกสารต่อไปนี้ เพื่อให้ความรู้เบื้องต้น
+          ไม่ใช่แนวทางเวชปฏิบัติของหน่วยงานใด และไม่ใช่คำแนะนำในการสั่งจ่ายยา
         </p>
+        <ol className="list-decimal space-y-2 pl-5 text-xs sm:text-sm leading-relaxed text-ink/75 font-sans">
+          <li>
+            Acne Therapark ภาคตจวิทยา คณะแพทยศาสตร์ศิริราชพยาบาล มหาวิทยาลัยมหิดล (นิทรรศการ METex 2022)
+            — ใช้สำหรับการจำแนกชนิดสิว 6 ชนิด{" "}
+            <a
+              href="https://www.si.mahidol.ac.th/metc/met/th/images/exhibition/METex2022/Acne/index.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-olive-700 underline-offset-2 hover:underline"
+            >
+              เปิดเว็บไซต์
+            </a>
+          </li>
+          <li>
+            เชิดชัย สุนทรภาส. แนวปฏิบัติการใช้ยารักษาสิวในร้านยา. สาขาวิชาเภสัชกรรมคลินิก คณะเภสัชศาสตร์ มหาวิทยาลัยขอนแก่น
+            — ใช้สำหรับระดับความรุนแรง ตัวยาทาและความเข้มข้น ข้อมูลที่ปรากฏในเอกสารนี้อ้างอิงแนวทางของ DST, AAD, SEA และ EDF
+          </li>
+          <li>
+            เบญญาภา เพชรปวรรักษ์, ศุภาพิชญ์ แก้วลี. ยารักษาสิว. ฉลาดใช้ยา (Rama RDU) งานเภสัชกรรมคลินิก
+            คณะแพทยศาสตร์โรงพยาบาลรามาธิบดี มหาวิทยาลัยมหิดล — ใช้สำหรับผลข้างเคียงและข้อควรระวังของยา
+          </li>
+        </ol>
+        {/* TODO(ทีม): ถ้ายังใช้ข้อมูลจาก Wikipedia หรือ AI ในส่วนอื่นของระบบ ให้เพิ่มรายการที่ระบุชื่อบทความ/วันที่เข้าถึง
+            หรือระบุว่าสร้างด้วย AI และยังไม่ผ่านการตรวจโดยแพทย์ */}
       </motion.div>
+
 
       <motion.div variants={item} className="pt-2 text-center">
         <Link href="/scan">

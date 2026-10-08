@@ -10,17 +10,15 @@ import {
   FileTextIcon,
   AlertTriangleIcon,
   SparklesIcon,
-  HeartIcon,
   CameraScanIcon,
 } from "./Icons";
 
 export default function MedicationDrawer() {
-  const { selectedMedication, setSelectedMedication, toggleSaveTreatment, isSaved } = useTreatment();
+  const { selectedMedication, setSelectedMedication } = useTreatment();
 
   if (!selectedMedication) return null;
 
   const m = selectedMedication;
-  const favorited = isSaved(m.id);
 
   return (
     <AnimatePresence>
@@ -47,7 +45,7 @@ export default function MedicationDrawer() {
           <div className="flex items-center justify-between border-b border-[#E8E2D5] p-5 bg-[#FAF8F5]">
             <div className="flex items-center gap-2.5">
               <span className="font-display text-base font-bold uppercase tracking-wider text-[#16271A]">
-                ข้อมูลตัวยาทางการแพทย์
+                ข้อมูลตัวยา
               </span>
               <span className="rounded-full bg-[#E5EDE6] px-2.5 py-0.5 text-[10px] font-bold text-[#233B27]">
                 {m.prescriptionType}
@@ -78,7 +76,7 @@ export default function MedicationDrawer() {
             </div>
 
             {/* Description */}
-            <div className="rounded-xl bg-[#F4EFE6] p-4 text-xs leading-relaxed text-[#2A4130] border border-[#E6DEC $\rightarrow$ E8]">
+            <div className="rounded-xl bg-[#F4EFE6] p-4 text-xs leading-relaxed text-[#2A4130] border border-[#E6DEC8]">
               <p className="font-display font-bold text-[#16271A] mb-1">คำอธิบายตัวยา:</p>
               {m.description}
             </div>
@@ -132,7 +130,7 @@ export default function MedicationDrawer() {
             <div className="rounded-xl border border-amber-300 bg-amber-50/75 p-4.5">
               <h4 className="font-display text-xs font-bold uppercase tracking-wider text-amber-900 mb-2 flex items-center gap-1.5">
                 <AlertTriangleIcon className="h-4 w-4 text-amber-700" />
-                <span>ข้อควรระวังทางการแพทย์</span>
+                <span>ข้อควรระวัง</span>
               </h4>
               <ul className="space-y-1.5 text-xs text-amber-950">
                 {m.cautions.map((c, i) => (
@@ -148,7 +146,7 @@ export default function MedicationDrawer() {
             <div>
               <h4 className="font-display text-xs font-bold uppercase tracking-wider text-[#16271A] mb-2 flex items-center gap-1.5">
                 <SparklesIcon className="h-4 w-4 text-[#2E5536]" />
-                <span>จับคู่ใช้ร่วมกันได้ดี</span>
+                <span>ใช้ร่วมกับ</span>
               </h4>
               <div className="flex flex-wrap gap-2">
                 {m.pairedWith.map((pair) => (
@@ -164,32 +162,19 @@ export default function MedicationDrawer() {
           </div>
 
           {/* Footer Actions */}
-          <div className="border-t border-[#E8E2D5] p-5 bg-[#FAF8F5] flex gap-3">
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => toggleSaveTreatment(m.id)}
-              className={`flex-1 py-3 text-xs font-bold uppercase tracking-wider border transition-colors flex items-center justify-center gap-1.5 ${
-                favorited
-                  ? "bg-[#C83244] text-white border-[#C83244]"
-                  : "border-[#213C27] text-[#213C27] hover:bg-white"
-              }`}
-            >
-              <HeartIcon className="h-4 w-4" filled={favorited} />
-              <span>{favorited ? "บันทึกไว้แล้ว" : "บันทึกตัวยานี้"}</span>
-            </motion.button>
+          <div className="border-t border-[#E8E2D5] p-5 bg-[#FAF8F5]">
             <Link
               href="/scan"
               onClick={() => setSelectedMedication(null)}
-              className="flex-1"
+              className="block w-full"
             >
               <motion.div
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="bg-[#213C27] py-3 text-center text-xs font-bold uppercase tracking-wider text-white hover:bg-[#142618] transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-md"
+                className="w-full bg-[#213C27] py-3.5 text-center text-xs font-bold uppercase tracking-wider text-white hover:bg-[#142618] transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-md"
               >
                 <CameraScanIcon className="h-4 w-4 text-[#A7D9B0]" />
-                <span>สแกนผิวของคุณ</span>
+                <span>สแกนผิวของคุณเพื่อดูยาที่เหมาะสม</span>
               </motion.div>
             </Link>
           </div>

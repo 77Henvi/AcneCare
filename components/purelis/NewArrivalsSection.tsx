@@ -36,17 +36,17 @@ export default function NewArrivalsSection() {
         >
           <div>
             <span className="font-display text-xs font-bold uppercase tracking-[0.25em] text-[#34593C]">
-              EVIDENCE-BASED ACTIVE INGREDIENTS
+              COMMON TOPICAL ACTIVE INGREDIENTS
             </span>
             <h2 className="mt-1 font-display text-2xl font-bold uppercase tracking-[0.14em] text-[#16271A] sm:text-3xl">
-              ตัวยารักษาสิวที่ AI แนะนำ
+              ตัวยาที่พบบ่อยในการรักษาสิว
             </h2>
           </div>
           <button
-            onClick={() => showToast("กำลังแสดงตัวยามาตรฐานทางการแพทย์ 4 กลุ่มหลัก")}
+            onClick={() => showToast("กำลังแสดงข้อมูลตัวยา 4 รายการ 4 กลุ่มหลัก")}
             className="group flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.16em] text-[#24422A] underline decoration-[#24422A]/40 underline-offset-4 transition-colors hover:text-[#142618]"
           >
-            <span>ดูตัวยาทั้งหมด 4 กลุ่ม</span>
+            <span>ดูตัวยาทั้งหมด 4 รายการ</span>
             <span className="transition-transform group-hover:translate-x-1">→</span>
           </button>
         </motion.div>
@@ -121,7 +121,7 @@ export default function NewArrivalsSection() {
                       className="w-full inline-flex items-center justify-center gap-1.5 rounded-none bg-[#213C27] py-3 text-xs font-bold uppercase tracking-[0.16em] text-white shadow-sm transition-all duration-200 hover:bg-[#15281A]"
                     >
                       <PillCapsuleIcon className="h-3.5 w-3.5 text-[#A7D9B0]" />
-                      <span>ดูวิธีใช้ &amp; ข้อควรระวัง</span>
+                      <span>ดูวิธีใช้และข้อควรระวัง</span>
                     </motion.button>
                   </div>
                 </div>
