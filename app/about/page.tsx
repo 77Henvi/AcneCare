@@ -68,8 +68,13 @@ export default function AboutPage() {
           <span>แหล่งอ้างอิงของข้อมูล</span>
         </h2>
         <p className="text-xs sm:text-sm leading-relaxed text-ink/75 font-sans">
+<<<<<<< HEAD
           ข้อมูลชนิดสิวและตัวยาในระบบนี้รวบรวมจากเอกสารต่อไปนี้ เพื่อให้ความรู้เบื้องต้น
           ไม่ใช่แนวทางเวชปฏิบัติของหน่วยงานใด และไม่ใช่คำแนะนำในการสั่งจ่ายยา
+=======
+          อนุกรมวิธานของชนิดสิว (6 Acne Types Taxonomy) และคำแนะนำการใช้ตัวยาเฉพาะที่ (Topical Active Ingredients เช่น Benzoyl Peroxide, Adapalene, BHA, Azelaic Acid) 
+          อ้างอิงจากแนวทางการดูแลรักษาสิว โดยภาควิชาตจวิทยา คณะแพทยศาสตร์ศิริราชพยาบาล มหาวิทยาลัยมหิดล และสมาคมแพทย์ผิวหนังแห่งประเทศไทย
+>>>>>>> origin/frontend
         </p>
         <ol className="list-decimal space-y-2 pl-5 text-xs sm:text-sm leading-relaxed text-ink/75 font-sans">
           <li>

@@ -174,7 +174,11 @@ export default function MedicationDrawer() {
                 className="w-full bg-[#213C27] py-3.5 text-center text-xs font-bold uppercase tracking-wider text-white hover:bg-[#142618] transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-md"
               >
                 <CameraScanIcon className="h-4 w-4 text-[#A7D9B0]" />
+<<<<<<< HEAD
                 <span>สแกนผิวของคุณเพื่อดูยาที่เหมาะสม</span>
+=======
+                <span>สแกนผิวของคุณเพื่อจับคู่ยาที่เหมาะสม</span>
+>>>>>>> origin/frontend
               </motion.div>
             </Link>
           </div>

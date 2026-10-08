@@ -28,7 +28,11 @@ export default function AnnouncementBar() {
             </span>
             <span className="font-display font-semibold tracking-wider text-[#A7D9B0]">AI Skin &amp; Acne Analysis</span>
             <span className="hidden opacity-40 sm:inline">|</span>
+<<<<<<< HEAD
             <span className="hidden sm:inline text-white/90">ตรวจประเมินผิวและแนะนำตัวยารักษาสิวจากข้อมูลทางการแพทย์เบื้องต้น</span>
+=======
+            <span className="hidden sm:inline text-white/90">ตรวจประเมินผิวและจับคู่ยารักษาสิวมาตรฐานการแพทย์</span>
+>>>>>>> origin/frontend
           </div>
         </motion.div>
 

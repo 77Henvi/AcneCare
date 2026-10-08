@@ -7,8 +7,13 @@ import Footer from "@/components/purelis/Footer";
 import MedicationDrawer from "@/components/purelis/MedicationDrawer";
 
 export const metadata: Metadata = {
+<<<<<<< HEAD
   title: "AcneCare AI — ประเมินผิวและสิวเบื้องต้น พร้อมข้อมูลตัวยารักษาสิว",
   description: "ตรวจวิเคราะห์สิว 6 ชนิดด้วย AI พร้อมแนะนำตัวยาและเวชสำอางที่เหมาะสมตามหลักการแพทย์",
+=======
+  title: "AcneCare AI — ประเมินผิวและสิวเบื้องต้น พร้อมจับคู่ตัวยารักษา",
+  description: "ตรวจวิเคราะห์สิว 6 ชนิดและสภาพผิวด้วย AI พร้อมจับคู่ตัวยาและเวชสำอางที่เหมาะสมตามหลักการแพทย์ผิวหนัง",
+>>>>>>> origin/frontend
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

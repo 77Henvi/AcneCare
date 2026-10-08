@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { MedicationCardVisual } from "./ProductVisuals";
 import { useTreatment } from "@/lib/treatmentContext";
 import { MEDICATIONS } from "@/lib/medications";
-import { HeartIcon, PillCapsuleIcon } from "./Icons";
+import { PillCapsuleIcon } from "./Icons";
 
 const container = {
   hidden: { opacity: 0 },
@@ -21,7 +21,7 @@ const item = {
 };
 
 export default function NewArrivalsSection() {
-  const { setSelectedMedication, toggleSaveTreatment, isSaved, showToast } = useTreatment();
+  const { setSelectedMedication, showToast } = useTreatment();
 
   return (
     <section id="medications" className="bg-[#FAF8F5] pb-20 sm:pb-24 lg:pb-28">
@@ -60,8 +60,6 @@ export default function NewArrivalsSection() {
           className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
         >
           {MEDICATIONS.map((m) => {
-            const favorited = isSaved(m.id);
-
             return (
               <motion.div
                 key={m.id}
@@ -69,7 +67,7 @@ export default function NewArrivalsSection() {
                 whileHover={{ y: -6 }}
                 className="group flex flex-col overflow-hidden rounded-xl border border-[#E4DCD0] bg-white transition-all duration-300 hover:border-[#213C27] hover:shadow-xl glass-card-glow"
               >
-                {/* Visual Area with Wishlist Heart */}
+                {/* Visual Area */}
                 <div className="relative overflow-hidden bg-[#F4F0E8] transition-colors group-hover:bg-[#EDE7DC]">
                   <MedicationCardVisual id={m.id} />
 
@@ -77,25 +75,6 @@ export default function NewArrivalsSection() {
                   <div className="absolute left-3.5 top-3.5 rounded-full bg-[#1A3320] px-3 py-1 text-[10px] font-bold tracking-wider text-white shadow-md">
                     {m.strength}
                   </div>
-
-                  {/* Bookmark Heart Button */}
-                  <motion.button
-                    whileHover={{ scale: 1.15 }}
-                    whileTap={{ scale: 0.9 }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleSaveTreatment(m.id);
-                    }}
-                    aria-label="Save treatment"
-                    className="absolute right-3.5 top-3.5 rounded-full bg-white/90 p-2 text-ink/70 shadow-sm backdrop-blur-sm transition-all hover:bg-white"
-                  >
-                    <HeartIcon
-                      className={`h-4 w-4 transition-colors ${
-                        favorited ? "text-[#C83244]" : "text-ink/60"
-                      }`}
-                      filled={favorited}
-                    />
-                  </motion.button>
                 </div>
 
                 {/* Medication Info */}
