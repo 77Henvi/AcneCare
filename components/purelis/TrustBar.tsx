@@ -12,13 +12,8 @@ const trustItems = [
   },
   {
     icon: <TargetCrosshairIcon className="h-5 w-5 text-[#213C27]" />,
-<<<<<<< HEAD
     title: "จำแนกสิว 6 ชนิด",
     subtitle: "ตรวจตามตำแหน่ง 5 โซนบนใบหน้า",
-=======
-    title: "จำแนกสิว 6 รูปแบบ",
-    subtitle: "ตรวจจับตามตำแหน่ง 5 โซน",
->>>>>>> origin/frontend
   },
   {
     icon: <ShieldCheckIcon className="h-5 w-5 text-[#213C27]" />,
