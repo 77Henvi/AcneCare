@@ -21,7 +21,7 @@ const categories: Category[] = [
   { type: "papule", visual: "papule", en: "PAPULES" },
   { type: "pustule", visual: "pustule", en: "PUSTULES" },
   { type: "nodule", visual: "nodule", en: "NODULES" },
-  { type: "cyst", visual: "nodule", en: "CYSTS" },
+  { type: "cyst", visual: "cyst", en: "CYSTS" },
 ];
 
 const container = {

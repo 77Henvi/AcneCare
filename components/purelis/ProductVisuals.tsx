@@ -224,10 +224,24 @@ export function CategoryVisual({ type }: { type: string }) {
       return (
         <div className="relative flex h-full w-full items-center justify-center p-3">
           <svg viewBox="0 0 120 140" className="h-full w-full drop-shadow-md">
-            <rect x="25" y="40" width="70" height="70" rx="8" fill="#F6E7E7" stroke="#DCAEAE" strokeWidth="1" />
-            <circle cx="60" cy="70" r="26" fill="#BF3535" opacity="0.4" />
-            <circle cx="60" cy="70" r="16" fill="#A82828" />
-            <text x="60" y="102" textAnchor="middle" fill="#8E1F1F" fontSize="5.5" fontWeight="bold">สิวหัวช้าง/ซีสต์ (พบแพทย์)</text>
+            <rect x="25" y="40" width="70" height="70" rx="8" fill="#F8EAE8" stroke="#DFB5B5" strokeWidth="1" />
+            <circle cx="60" cy="70" r="26" fill="#C43B3B" opacity="0.35" />
+            <circle cx="60" cy="70" r="18" fill="#9B2626" />
+            <circle cx="60" cy="70" r="10" fill="#7A1818" />
+            <text x="60" y="102" textAnchor="middle" fill="#7A1818" fontSize="5.5" fontWeight="bold">สิวหัวช้าง (Nodule)</text>
+          </svg>
+        </div>
+      );
+    case "cyst":
+      return (
+        <div className="relative flex h-full w-full items-center justify-center p-3">
+          <svg viewBox="0 0 120 140" className="h-full w-full drop-shadow-md">
+            <rect x="25" y="40" width="70" height="70" rx="8" fill="#F5E8F0" stroke="#DCB7CF" strokeWidth="1" />
+            {/* Deep fluid cystic sac */}
+            <ellipse cx="60" cy="70" rx="28" ry="24" fill="#8C2C6A" opacity="0.3" />
+            <ellipse cx="60" cy="70" rx="20" ry="17" fill="#6E1B51" />
+            <ellipse cx="60" cy="70" rx="10" ry="8" fill="#DE9782" opacity="0.9" stroke="#FFEAE2" strokeWidth="0.8" />
+            <text x="60" y="102" textAnchor="middle" fill="#6E1B51" fontSize="5.5" fontWeight="bold">สิวซีสต์ (Cyst)</text>
           </svg>
         </div>
       );

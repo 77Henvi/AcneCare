@@ -75,7 +75,11 @@ export default function HistoryPage() {
                         ผลการตรวจ
                       </span>
                       <p className="font-display text-lg font-bold text-[#1C3221] group-hover:text-[#285532] transition-colors">
-                        {s.result.skinType ? SKIN_TYPE_LABEL_TH[s.result.skinType] : "ยังไม่ได้ระบุ"}
+                        {s.result.skinType
+                          ? typeof s.result.skinType === "string"
+                            ? SKIN_TYPE_LABEL_TH[s.result.skinType as keyof typeof SKIN_TYPE_LABEL_TH]
+                            : SKIN_TYPE_LABEL_TH[s.result.skinType.label]
+                          : "ยังไม่ได้ระบุ"}
                       </p>
                     </div>
                     <span className="rounded-full bg-[#EAF2EC] px-2.5 py-1 text-xs font-semibold text-[#233B27] flex items-center gap-1">
