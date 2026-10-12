@@ -1,10 +1,12 @@
 import { PredictionResult } from "@/lib/inference/types";
+import { SkinType } from "@/lib/taxonomy";
 import { Recommendation } from "@/lib/recommendation/engine";
 
 export interface ScanRecord {
   id: string;
   createdAt: string;
   modelVersion: string;
+  skinType?: SkinType;
   result: PredictionResult;
   recommendations: Recommendation[];
 }
@@ -33,6 +35,19 @@ export function listScans(): ScanRecord[] {
 
 export function getScan(id: string): ScanRecord | undefined {
   return listScans().find((s) => s.id === id);
+}
+
+/** ลบผลการสแกนรายการเดียว (จุดสลับไป `DELETE /api/scans/{id}` เมื่อมี backend) */
+export function deleteScan(id: string): void {
+  if (typeof window === "undefined") return;
+  const rest = listScans().filter((s) => s.id !== id);
+  window.localStorage.setItem(KEY, JSON.stringify(rest));
+}
+
+/** ล้างประวัติการสแกนทั้งหมด (จุดสลับไป `DELETE /api/scans` เมื่อมี backend) */
+export function clearScans(): void {
+  if (typeof window === "undefined") return;
+  window.localStorage.removeItem(KEY);
 }
 
 export function newScanId(): string {

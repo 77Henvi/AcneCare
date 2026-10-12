@@ -1,4 +1,4 @@
-import { ACNE_TYPES, FACE_REGIONS, SKIN_TYPES } from "@/lib/taxonomy";
+import { ACNE_TYPES, FACE_REGIONS } from "@/lib/taxonomy";
 import { PredictionResult, Predictor } from "./types";
 
 function pick<T>(arr: T[]): T {
@@ -34,15 +34,14 @@ export class MockPredictor implements Predictor {
       findingCount === 0
         ? []
         : Array.from({ length: findingCount }).map(() => ({
-            type: pick(nonEmptyAcneTypes),
-            confidence: randomConfidence(),
-            region: pick(FACE_REGIONS),
-          }));
+          type: pick(nonEmptyAcneTypes),
+          confidence: randomConfidence(),
+          region: pick(FACE_REGIONS),
+        }));
 
     return {
       modelVersion: this.modelVersion,
       imageQuality: { score: randomConfidence(0.7, 0.98), usable: true, reasons: [] },
-      skinType: { label: pick(SKIN_TYPES), confidence: randomConfidence() },
       acne,
     };
   }

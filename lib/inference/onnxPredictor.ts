@@ -163,8 +163,6 @@ export class OnnxPredictor implements Predictor {
             modelVersion: this.modelVersion,
             // placeholder: ต่อกับ lib/quality-check ภายหลัง
             imageQuality: { score: 1, usable: true, reasons: [] },
-            // โมเดลนี้ตรวจจับสิวอย่างเดียว confidence 0 = ยังไม่ได้ประเมิน
-            skinType: { label: "normal", confidence: 0 },
             acne,
         };
     }

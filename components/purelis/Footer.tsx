@@ -36,7 +36,7 @@ export default function Footer() {
               </div>
               <div>
                 <h4 className="font-display text-xs font-bold uppercase tracking-wider text-[#16271A]">
-                  Acne Therapark (ศิริราช)
+                  Acne Therapark (Siriraj)
                 </h4>
                 <p className="mt-0.5 text-xs text-[#3E5843]">อิงข้อมูลชนิดสิวจากสื่อการเรียนรู้ ภาคตจวิทยา ศิริราช</p>
               </div>

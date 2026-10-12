@@ -11,7 +11,7 @@ import {
 import { MEDICATIONS, MEDS_BY_ACNE_TYPE, TREATMENT_NOTES } from "@/lib/medications";
 import { useTreatment } from "@/lib/treatmentContext";
 import Disclaimer from "@/components/Disclaimer";
-import { PillCapsuleIcon, AlertTriangleIcon, SparklesIcon, ShieldCheckIcon } from "@/components/purelis/Icons";
+import { PillCapsuleIcon, AlertTriangleIcon, ShieldCheckIcon } from "@/components/purelis/Icons";
 
 const severityDot: Record<string, string> = {
   none: "bg-ink/20",
@@ -50,23 +50,11 @@ export default function ResultCard({ scan }: { scan: ScanRecord }) {
     <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
       {/* 1. Skin Type Assessment */}
       <motion.section variants={item} className="rounded-xl border border-sand-300/80 bg-white p-5 sm:p-6 shadow-sm">
-        <span className="font-display text-xs font-bold uppercase tracking-wider text-[#3D6345]">ลักษณะผิวที่ AI ประเมิน</span>
+        <span className="font-display text-xs font-bold uppercase tracking-wider text-[#3D6345]">ประเภทผิวที่คุณเลือก</span>
         <div className="mt-2 flex items-baseline justify-between">
           <p className="font-display text-3xl font-bold text-[#1C3A23]">
-            {typeof result.skinType === "string"
-              ? (SKIN_TYPE_LABEL_TH[result.skinType as keyof typeof SKIN_TYPE_LABEL_TH] ?? "ไม่ระบุ")
-              : result.skinType?.label
-              ? (SKIN_TYPE_LABEL_TH[result.skinType.label] ?? "ไม่ระบุ")
-              : "ไม่ระบุ"}
+            {scan.skinType ? SKIN_TYPE_LABEL_TH[scan.skinType] : "ยังไม่ได้ระบุ"}
           </p>
-          <span className="inline-flex items-center gap-1 rounded-full bg-[#EAF2EC] px-3 py-1 text-xs font-semibold text-[#233B27]">
-            <SparklesIcon className="h-3 w-3 text-teal-700" />
-            <span>
-              {typeof result.skinType === "object" && result.skinType?.confidence != null
-                ? `${Math.round(result.skinType.confidence * 100)}% Confidence`
-                : "บันทึกโดยผู้ใช้"}
-            </span>
-          </span>
         </div>
       </motion.section>
 
