@@ -21,7 +21,7 @@ const item = {
 };
 
 export default function NewArrivalsSection() {
-  const { setSelectedMedication, showToast } = useTreatment();
+  const { setSelectedMedication } = useTreatment();
 
   return (
     <section id="medications" className="bg-[#FAF8F5] pb-20 sm:pb-24 lg:pb-28">
@@ -32,7 +32,7 @@ export default function NewArrivalsSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-40px" }}
           transition={{ duration: 0.5 }}
-          className="mb-10 flex flex-col sm:flex-row sm:items-end justify-between border-b border-[#E4DCD0] pb-5 gap-3"
+          className="mb-10 border-b border-[#E4DCD0] pb-5"
         >
           <div>
             <span className="font-display text-xs font-bold uppercase tracking-[0.25em] text-[#34593C]">
@@ -42,13 +42,6 @@ export default function NewArrivalsSection() {
               ตัวยาที่พบบ่อยในการรักษาสิว
             </h2>
           </div>
-          <button
-            onClick={() => showToast("กำลังแสดงข้อมูลตัวยา 4 รายการ 4 กลุ่มหลัก")}
-            className="group flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.16em] text-[#24422A] underline decoration-[#24422A]/40 underline-offset-4 transition-colors hover:text-[#142618]"
-          >
-            <span>ดูตัวยาทั้งหมด 4 รายการ</span>
-            <span className="transition-transform group-hover:translate-x-1">→</span>
-          </button>
         </motion.div>
 
         {/* 4 Medication Cards Grid with Stagger */}
