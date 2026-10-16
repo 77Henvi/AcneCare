@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import Camera from "@/components/Camera";
@@ -81,9 +82,48 @@ export default function ScanPage() {
         <span className="font-display text-xs font-bold uppercase tracking-wider text-[#3D6345]">AI SKIN SCANNER</span>
         <h1 className="mt-1 font-display text-3xl font-bold text-[#1C3221]">สแกนผิวและตรวจจับสิว</h1>
         <p className="mt-1 text-xs sm:text-sm text-ink/70">
-          หันหน้าตรง อยู่ในที่ที่มีแสงสว่างเพียงพอ ไม่สวมหน้ากากหรือใช้ฟิลเตอร์แต่งภาพ
+          เพื่อให้ระบบ AI ตรวจวิเคราะห์สิวได้อย่างแม่นยำ กรุณาดูคำแนะนำมุมถ่ายภาพด้านล่าง
         </p>
       </div>
+
+      {/* คำแนะนำมุมและวิธีการถ่ายภาพ/อัปโหลดรูป */}
+      {stage === "capture" && (
+        <motion.div
+          variants={fade}
+          initial="hidden"
+          animate="show"
+          className="rounded-2xl border border-[#DFD7CB] bg-[#F7F4EE] p-4 sm:p-5 shadow-xs space-y-3.5"
+        >
+          <div className="flex items-center gap-2">
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#213C27] text-white text-xs font-bold">
+              i
+            </span>
+            <h2 className="font-display text-sm font-bold text-[#1B3120] uppercase tracking-wide">
+              คำแนะนำการถ่ายภาพเพื่อผลลัพธ์ที่แม่นยำ
+            </h2>
+          </div>
+
+          <p className="text-xs text-[#3E5544] leading-relaxed">
+            ถ่ายหรืออัปโหลดภาพที่<strong>เห็นกรอบหน้าและสภาพผิวชัดเจน</strong> โดยระบบสามารถตรวจจับได้ดีทั้งมุมหน้าตรงและหันข้าง:
+          </p>
+
+          <div className="overflow-hidden rounded-2xl border border-[#DFD7CB] bg-white shadow-xs p-1.5 sm:p-2">
+            <Image
+              src="/images/scan-guidance.png"
+              alt="คำแนะนำมุมถ่ายภาพ: 1. มุมหน้าตรง, 2. หันข้างซ้าย, 3. หันข้างขวา"
+              width={1000}
+              height={420}
+              priority
+              className="w-full h-auto rounded-xl object-contain block"
+            />
+          </div>
+
+          <div className="rounded-lg bg-white/70 px-3 py-2 text-[11px] text-[#364F3C] flex items-center gap-1.5">
+            <span className="text-amber-700 font-bold">💡 ข้อแนะนำ:</span>
+            <span>อยู่ในที่มีแสงสว่างเพียงพอ หน้าไม่มืด ถอดแว่นตา/แมสก์ และไม่ใช้ฟิลเตอร์แต่งภาพ</span>
+          </div>
+        </motion.div>
+      )}
 
       <AnimatePresence mode="wait">
         {stage !== "analyzing" && stage !== "skin-type" && (
