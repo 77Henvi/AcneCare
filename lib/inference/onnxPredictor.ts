@@ -6,12 +6,9 @@ import { toAcneType, toRegion } from "./utils";
 // ลำดับต้องตรงกับ model.names ตอนเทรน
 const CLASS_NAMES = ["Blackheads", "Cysts", "Nodules", "Papules", "Pustules", "Whiteheads"];
 const NUM_CLASSES = CLASS_NAMES.length;
-const NUM_BOXES = 8400;
 const SIZE = 640;
 const IOU_THRESHOLD = 0.45;
 
-// nodule/cyst ผูกกับกฎส่งต่อแพทย์ จึงตั้งเกณฑ์ต่ำกว่า
-// ยอมให้เตือนเกินดีกว่าพลาดเคสที่ควรพบแพทย์
 const MIN_CONFIDENCE: Record<AcneType, number> = {
     no_visible_acne: 1,
     whitehead: 0.25,
@@ -35,8 +32,7 @@ function iou(a: Box, b: Box): number {
     const ix = Math.max(0, Math.min(a.x2, b.x2) - Math.max(a.x1, b.x1));
     const iy = Math.max(0, Math.min(a.y2, b.y2) - Math.max(a.y1, b.y1));
     const inter = ix * iy;
-    const union =
-        (a.x2 - a.x1) * (a.y2 - a.y1) + (b.x2 - b.x1) * (b.y2 - b.y1) - inter;
+    const union = (a.x2 - a.x1) * (a.y2 - a.y1) + (b.x2 - b.x1) * (b.y2 - b.y1) - inter;
     return union <= 0 ? 0 : inter / union;
 }
 
@@ -52,6 +48,12 @@ function nms(boxes: Box[]): Box[] {
     return kept;
 }
 
+// Helper ป้องกันปัญหา Dynamic Import ในบาง Bundler
+async function getOrt() {
+    const ortModule = await import("onnxruntime-web");
+    return ortModule.default || ortModule;
+}
+
 export class OnnxPredictor implements Predictor {
     readonly modelVersion = "acne-onnx-v0.1";
     private modelUrl: string;
@@ -61,12 +63,10 @@ export class OnnxPredictor implements Predictor {
         this.modelUrl = modelUrl;
     }
 
-    // สร้าง session ตอนเรียกใช้จริงเท่านั้น (ฝั่ง browser)
-    // เพราะ index.ts ถูก import ฝั่ง server ด้วย ห้ามโหลดโมเดลตอน import
     private getSession(): Promise<InferenceSession> {
         if (!this.sessionPromise) {
             this.sessionPromise = (async () => {
-                const ort = await import("onnxruntime-web");
+                const ort = await getOrt();
                 ort.env.wasm.wasmPaths = "/ort/";
                 return ort.InferenceSession.create(this.modelUrl);
             })();
@@ -74,17 +74,19 @@ export class OnnxPredictor implements Predictor {
         return this.sessionPromise;
     }
 
-    async predict(
-        image: HTMLImageElement | HTMLCanvasElement
-    ): Promise<PredictionResult> {
-        const ort = await import("onnxruntime-web");
-        const session = await this.getSession();
+    async predict(image: HTMLImageElement | HTMLCanvasElement): Promise<PredictionResult> {
+        if (!image) throw new Error("ไม่มีข้อมูลภาพส่งเข้ามา");
 
         const srcW = image instanceof HTMLImageElement ? image.naturalWidth : image.width;
         const srcH = image instanceof HTMLImageElement ? image.naturalHeight : image.height;
 
-        // Letterbox: ย่อภาพโดยคงสัดส่วน แล้วเติมขอบสีเทาให้เป็น 640x640
-        // (ตรงกับวิธีที่ Ultralytics ใช้ตอนเทรน)
+        if (srcW === 0 || srcH === 0) {
+            throw new Error("ขนาดภาพเป็น 0 (กล้องอาจจะยังไม่เปิด หรือรูปยังโหลดไม่เสร็จ)");
+        }
+
+        const ort = await getOrt();
+        const session = await this.getSession();
+
         const scale = Math.min(SIZE / srcW, SIZE / srcH);
         const newW = Math.round(srcW * scale);
         const newH = Math.round(srcH * scale);
@@ -100,7 +102,6 @@ export class OnnxPredictor implements Predictor {
         ctx.drawImage(image, padX, padY, newW, newH);
         const { data } = ctx.getImageData(0, 0, SIZE, SIZE);
 
-        // แปลงเป็น tensor [1, 3, 640, 640] ค่า 0..1 แยกช่อง R, G, B
         const plane = SIZE * SIZE;
         const input = new Float32Array(3 * plane);
         for (let i = 0; i < plane; i++) {
@@ -112,44 +113,93 @@ export class OnnxPredictor implements Predictor {
         const outputs = await session.run({
             [session.inputNames[0]]: new ort.Tensor("float32", input, [1, 3, SIZE, SIZE]),
         });
-        const out = outputs[session.outputNames[0]].data as Float32Array;
-        // out จัดเรียงเป็น [ค่า 10 ตัว][กล่อง 8400 กล่อง] ค่าที่ c ของกล่อง i อยู่ที่ out[c * 8400 + i]
+        
+        const outputTensor = outputs[session.outputNames[0]];
+        const out = outputTensor.data as Float32Array;
+        const dims = outputTensor.dims;
+
+        console.log("Model Output Dims:", dims);
 
         const candidates: Box[] = [];
-        for (let i = 0; i < NUM_BOXES; i++) {
-            let best = -1;
-            let bestScore = 0;
-            for (let c = 0; c < NUM_CLASSES; c++) {
-                const s = out[(4 + c) * NUM_BOXES + i];
-                if (s > bestScore) {
-                    bestScore = s;
-                    best = c;
-                }
+
+        if (dims.length === 3 && dims[2] === 6) {
+            // กรณี 1: End-to-End
+            const numDetections = dims[1]; 
+            for (let i = 0; i < numDetections; i++) {
+                const o = i * 6;
+                const score = out[o + 4];
+                const cls = Math.round(out[o + 5]);
+                
+                // ดักจับคะแนนต่ำและ Class ผิดพลาด
+                if (score < 0.1 || cls < 0 || cls >= NUM_CLASSES) continue;
+
+                const type = toAcneType(CLASS_NAMES[cls]);
+                if (!type || type === "no_visible_acne" || score < MIN_CONFIDENCE[type]) continue;
+
+                candidates.push({ x1: out[o], y1: out[o + 1], x2: out[o + 2], y2: out[o + 3], score, type });
             }
-            if (best < 0) continue;
+        } else if (dims.length === 3 && dims[1] === NUM_CLASSES + 4) {
+            // กรณี 2: Standard YOLO แบบเก่า -> Shape: [1, 10, 8400]
+            const numBoxes = dims[2];
+            for (let i = 0; i < numBoxes; i++) {
+                let maxScore = 0;
+                let maxClass = -1;
+                for (let c = 0; c < NUM_CLASSES; c++) {
+                    const score = out[(4 + c) * numBoxes + i];
+                    if (score > maxScore) { maxScore = score; maxClass = c; }
+                }
 
-            const type = toAcneType(CLASS_NAMES[best]);
-            if (!type || type === "no_visible_acne") continue;
-            if (bestScore < MIN_CONFIDENCE[type]) continue;
+                // --- บรรทัดสำคัญที่แก้ปัญหา Crash ---
+                if (maxClass === -1 || maxScore < 0.1) continue;
 
-            const cx = out[0 * NUM_BOXES + i];
-            const cy = out[1 * NUM_BOXES + i];
-            const w = out[2 * NUM_BOXES + i];
-            const h = out[3 * NUM_BOXES + i];
-            candidates.push({
-                x1: cx - w / 2,
-                y1: cy - h / 2,
-                x2: cx + w / 2,
-                y2: cy + h / 2,
-                score: bestScore,
-                type,
-            });
+                const type = toAcneType(CLASS_NAMES[maxClass]);
+                if (!type || type === "no_visible_acne" || maxScore < MIN_CONFIDENCE[type]) continue;
+
+                const cx = out[0 * numBoxes + i];
+                const cy = out[1 * numBoxes + i];
+                const w = out[2 * numBoxes + i];
+                const h = out[3 * numBoxes + i];
+
+                candidates.push({ x1: cx - w / 2, y1: cy - h / 2, x2: cx + w / 2, y2: cy + h / 2, score: maxScore, type });
+            }
+        } else if (dims.length === 3 && dims[2] === NUM_CLASSES + 4) {
+            // กรณี 3: Standard YOLO แบบใหม่ (Ultralytics >= 8.1)
+            const numBoxes = dims[1]; 
+            const rowSize = dims[2];  
+            
+            for (let i = 0; i < numBoxes; i++) {
+                let maxScore = 0;
+                let maxClass = -1;
+                const offset = i * rowSize;
+
+                for (let c = 0; c < NUM_CLASSES; c++) {
+                    const score = out[offset + 4 + c];
+                    if (score > maxScore) { maxScore = score; maxClass = c; }
+                }
+
+                // --- บรรทัดสำคัญที่แก้ปัญหา Crash ---
+                if (maxClass === -1 || maxScore < 0.1) continue;
+
+                const type = toAcneType(CLASS_NAMES[maxClass]);
+                if (!type || type === "no_visible_acne" || maxScore < MIN_CONFIDENCE[type]) continue;
+
+                const cx = out[offset + 0];
+                const cy = out[offset + 1];
+                const w = out[offset + 2];
+                const h = out[offset + 3];
+
+                candidates.push({ x1: cx - w / 2, y1: cy - h / 2, x2: cx + w / 2, y2: cy + h / 2, score: maxScore, type });
+            }
+        } else {
+            console.error("Unknown output shape:", dims);
         }
 
         const acne: AcneFinding[] = nms(candidates).map((b) => {
-            // แปลงจุดกึ่งกลางกลับเป็นพิกัดบนภาพต้นฉบับ (ถอด padding และ scale)
-            const cx = ((b.x1 + b.x2) / 2 - padX) / scale;
-            const cy = ((b.y1 + b.y2) / 2 - padY) / scale;
+            const rawCx = ((b.x1 + b.x2) / 2 - padX) / scale;
+            const rawCy = ((b.y1 + b.y2) / 2 - padY) / scale;
+            const cx = Math.max(0, Math.min(srcW, rawCx));
+            const cy = Math.max(0, Math.min(srcH, rawCy));
+
             return {
                 type: b.type,
                 confidence: b.score,
@@ -161,7 +211,6 @@ export class OnnxPredictor implements Predictor {
 
         return {
             modelVersion: this.modelVersion,
-            // placeholder: ต่อกับ lib/quality-check ภายหลัง
             imageQuality: { score: 1, usable: true, reasons: [] },
             acne,
         };
