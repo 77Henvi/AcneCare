@@ -36,9 +36,11 @@ export default function ScanPage() {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [pendingResult, setPendingResult] = useState<PredictionResult | null>(null);
   const [selectedSkinType, setSelectedSkinType] = useState<SkinType | null>(null);
+  const [inferenceError, setInferenceError] = useState<string | null>(null);
 
   async function handleCapture(canvas: HTMLCanvasElement) {
     setPreviewUrl(canvas.toDataURL("image/jpeg", 0.85));
+    setInferenceError(null);
     setStage("checking");
 
     const quality = checkImageQuality(canvas);
@@ -55,7 +57,9 @@ export default function ScanPage() {
       result.imageQuality = quality;
       setPendingResult(result);
       setStage("skin-type");
-    } catch {
+    } catch (error) {
+      console.error("ONNX inference failed:", error);
+      setInferenceError(error instanceof Error ? error.message : String(error));
       setStage("error");
     }
   }
@@ -175,7 +179,7 @@ export default function ScanPage() {
             <div className="relative aspect-square w-full overflow-hidden rounded-2xl border-2 border-[#233B27]/40 shadow-2xl">
               {previewUrl && (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={previewUrl} alt="ภาพที่ถ่าย" className="h-full w-full object-cover" />
+                <img src={previewUrl} alt="ภาพที่ถ่าย" className="h-full w-full object-contain" />
               )}
               <ScanLineOverlay />
             </div>
@@ -239,8 +243,16 @@ export default function ScanPage() {
         )}
 
         {stage === "error" && (
-          <motion.div key="error" variants={fade} initial="hidden" animate="show" exit="exit" className="rounded-xl bg-red-50 p-4 text-sm text-red-700">
-            เกิดข้อผิดพลาดระหว่างการวิเคราะห์ กรุณาลองใหม่อีกครั้ง
+          <motion.div key="error" variants={fade} initial="hidden" animate="show" exit="exit" className="space-y-3 rounded-xl bg-red-50 p-4 text-sm text-red-700">
+            <p className="font-bold">เกิดข้อผิดพลาดระหว่างการวิเคราะห์</p>
+            <p>รายละเอียด: {inferenceError ?? "ไม่พบรายละเอียดข้อผิดพลาด"}</p>
+            <button
+              type="button"
+              onClick={() => setStage("capture")}
+              className="rounded bg-red-700 px-4 py-2 text-xs font-bold text-white hover:bg-red-800"
+            >
+              ลองใหม่
+            </button>
           </motion.div>
         )}
       </AnimatePresence>

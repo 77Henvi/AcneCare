@@ -12,9 +12,26 @@ export interface ImageQuality {
   reasons: string[]; // e.g. ["blurry", "low_light"] — empty if usable
 }
 
+export type FaceOrientation =
+  | {
+      detected: true;
+      direction: "front" | "left" | "right";
+      yawDegrees: number;
+      pitchDegrees: number;
+      rollDegrees: number;
+    }
+  | {
+      detected: false;
+      direction: "not_detected";
+      yawDegrees: null;
+      pitchDegrees: null;
+      rollDegrees: null;
+    };
+
 export interface PredictionResult {
   modelVersion: string;
   imageQuality: ImageQuality;
+  faceOrientation?: FaceOrientation;
   acne: AcneFinding[];
 }
 

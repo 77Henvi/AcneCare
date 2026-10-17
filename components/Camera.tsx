@@ -6,6 +6,20 @@ interface CameraProps {
   onCapture: (canvas: HTMLCanvasElement) => void;
 }
 
+const MAX_IMAGE_DIMENSION = 1280;
+
+function drawEntireImage(
+  source: CanvasImageSource,
+  sourceWidth: number,
+  sourceHeight: number,
+  canvas: HTMLCanvasElement,
+) {
+  const scale = Math.min(1, MAX_IMAGE_DIMENSION / Math.max(sourceWidth, sourceHeight));
+  canvas.width = Math.max(1, Math.round(sourceWidth * scale));
+  canvas.height = Math.max(1, Math.round(sourceHeight * scale));
+  canvas.getContext("2d")?.drawImage(source, 0, 0, canvas.width, canvas.height);
+}
+
 export default function Camera({ onCapture }: CameraProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -40,21 +54,7 @@ export default function Camera({ onCapture }: CameraProps) {
     const video = videoRef.current;
     const canvas = canvasRef.current;
     if (!video || !canvas) return;
-    const size = Math.min(video.videoWidth, video.videoHeight);
-    canvas.width = size;
-    canvas.height = size;
-    const ctx = canvas.getContext("2d");
-    ctx?.drawImage(
-      video,
-      (video.videoWidth - size) / 2,
-      (video.videoHeight - size) / 2,
-      size,
-      size,
-      0,
-      0,
-      size,
-      size,
-    );
+    drawEntireImage(video, video.videoWidth, video.videoHeight, canvas);
     onCapture(canvas);
   }
 
@@ -65,11 +65,7 @@ export default function Camera({ onCapture }: CameraProps) {
     img.onload = () => {
       const canvas = canvasRef.current;
       if (!canvas) return;
-      const size = Math.min(img.width, img.height);
-      canvas.width = size;
-      canvas.height = size;
-      const ctx = canvas.getContext("2d");
-      ctx?.drawImage(img, (img.width - size) / 2, (img.height - size) / 2, size, size, 0, 0, size, size);
+      drawEntireImage(img, img.naturalWidth, img.naturalHeight, canvas);
       onCapture(canvas);
     };
     img.src = URL.createObjectURL(file);
@@ -79,7 +75,7 @@ export default function Camera({ onCapture }: CameraProps) {
     <div className="space-y-4">
       <div className="relative aspect-square w-full overflow-hidden rounded-card border border-sand-300 bg-ink/5">
         {streamActive ? (
-          <video ref={videoRef} className="h-full w-full object-cover" muted playsInline />
+          <video ref={videoRef} className="h-full w-full object-contain" muted playsInline />
         ) : (
           <div className="flex h-full w-full items-center justify-center text-sm text-ink/50">
             ยังไม่ได้เปิดกล้อง

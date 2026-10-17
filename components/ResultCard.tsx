@@ -33,6 +33,13 @@ const item = {
 export default function ResultCard({ scan }: { scan: ScanRecord }) {
   const { result, recommendations } = scan;
   const { setSelectedMedication } = useTreatment();
+  const faceOrientation = result.faceOrientation;
+  const directionLabel = {
+    front: "หันหน้าค่อนข้างตรง",
+    left: "หันไปทางซ้าย (เห็นแก้มขวา)",
+    right: "หันไปทางขวา (เห็นแก้มซ้าย)",
+    not_detected: "ไม่พบโครงหน้า",
+  }[faceOrientation?.direction ?? "not_detected"];
 
   // Find relevant medications based on detected findings
   const detectedTypes = new Set(result.acne.map((a) => a.type));
@@ -61,6 +68,18 @@ export default function ResultCard({ scan }: { scan: ScanRecord }) {
       {/* 2. Detected Acne Findings */}
       <motion.section variants={item} className="rounded-xl border border-sand-300/80 bg-white p-5 sm:p-6 shadow-sm">
         <span className="font-display text-xs font-bold uppercase tracking-wider text-[#3D6345]">ลักษณะสิวที่ตรวจพบ</span>
+        {faceOrientation && (
+          <div className="mt-3 rounded-lg bg-[#F7F4EE] px-3 py-2 text-xs text-[#3E5544]">
+            <p>ทิศทางใบหน้า: {directionLabel}</p>
+            {faceOrientation.detected ? (
+              <p className="mt-1 text-ink/60">
+                มุมโดยประมาณ — หันซ้าย/ขวา {faceOrientation.yawDegrees}° · ก้ม/เงย {faceOrientation.pitchDegrees}° · เอียง {faceOrientation.rollDegrees}°
+              </p>
+            ) : (
+              <p className="mt-1 text-ink/60">ตำแหน่งบริเวณสิวใช้การประเมินจากภาพแบบคร่าว ๆ</p>
+            )}
+          </div>
+        )}
         {result.acne.length === 0 ? (
           <p className="mt-3 text-sm text-ink/70">ไม่พบลักษณะสิวที่ชัดเจนในภาพ — สภาพผิวดูปกติ</p>
         ) : (
