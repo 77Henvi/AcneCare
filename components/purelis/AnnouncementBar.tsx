@@ -28,18 +28,18 @@ export default function AnnouncementBar() {
             </span>
             <span className="font-display font-semibold tracking-wider text-[#A7D9B0]">AI Skin &amp; Acne Analysis</span>
             <span className="hidden opacity-40 sm:inline">|</span>
-            <span className="hidden sm:inline text-white/90">ตรวจประเมินผิวและแนะนำตัวยารักษาสิวจากข้อมูลทางการแพทย์เบื้องต้น</span>
+            <span className="hidden sm:inline text-white/90">ตรวจจับสิวและแนะนำตัวยารักษาสิวจากข้อมูลทางการแพทย์เบื้องต้น</span>
           </div>
         </motion.div>
 
         {/* Right Info Badges */}
         <div className="hidden items-center gap-4 text-white/80 sm:flex">
           <button
-            onClick={() => showToast("การประมวลผลเกิดขึ้นบนเครื่องของคุณ (Client-Side) ภาพไม่ถูกส่งขึ้นเซิร์ฟเวอร์")}
+            onClick={() => showToast("การประมวลผลเกิดขึ้นบนเครื่องของคุณ (Client-Side) ภาพไม่ถูกส่งขึ้นเซิร์ฟเวอร์ ภาพย่อสำหรับดูประวัติเก็บไว้ในเบราว์เซอร์ของคุณเท่านั้น และลบได้ทุกเมื่อ")}
             className="flex items-center gap-1.5 hover:text-white transition-colors"
           >
             <ShieldCheckIcon className="h-3.5 w-3.5 text-[#A7D9B0]" />
-            <span>ไม่เก็บภาพใบหน้า</span>
+            <span>ภาพไม่ถูกส่งขึ้นเซิร์ฟเวอร์</span>
           </button>
           <span className="opacity-30">|</span>
           <Link href="/about" className="flex items-center gap-1 hover:text-white transition-colors">

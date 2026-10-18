@@ -40,7 +40,7 @@ export function getAcneRecommendations(findings: AcneFinding[]): Recommendation[
 
   if (types.has("whitehead") || types.has("blackhead")) {
     recs.push(
-      { ruleId: "comedonal_gentle_exfoliation", text: "ผลัดเซลล์ผิวอย่างอ่อนโยนเป็นประจำ" },
+      { ruleId: "comedonal_gentle_exfoliation", text: "ผลัดเซลล์ผิวอย่างอ่อนโยนเป็นประจำ (เลี่ยงบริเวณที่มีสิวอักเสบ)" },
       { ruleId: "comedonal_no_diy_extraction", text: "ไม่ควรบีบหรือกดสิวเอง" },
       { ruleId: "comedonal_avoid_comedogenic_makeup", text: "หลีกเลี่ยงเครื่องสำอางที่อุดตันรูขุมขน" },
     );

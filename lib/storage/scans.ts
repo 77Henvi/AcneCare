@@ -7,6 +7,8 @@ export interface ScanRecord {
   createdAt: string;
   modelVersion: string;
   skinType?: SkinType;
+  /** ภาพย่อ (data URL) ใช้วาดกรอบตอนแสดงผล (ไม่มีในรายการเก่า หรือถ้าพื้นที่เก็บเต็ม) */
+  image?: string;
   result: PredictionResult;
   recommendations: Recommendation[];
 }
@@ -22,15 +24,51 @@ const KEY = "skin-scanner:scans";
  */
 export function saveScan(scan: ScanRecord): void {
   if (typeof window === "undefined") return;
-  const all = listScans();
-  all.unshift(scan);
-  window.localStorage.setItem(KEY, JSON.stringify(all));
+  const existing = listScans();
+
+  // localStorage มีโควตาจำกัด ถ้าเต็มให้ทิ้งภาพย่อของรายการเก่าก่อน แล้วค่อยทิ้งภาพของรายการนี้
+  // สร้างทีละรูปแบบเมื่อจำเป็น เพื่อไม่ต้อง stringify ประวัติทั้งก้อนซ้ำโดยไม่จำเป็น
+  const attempts: Array<() => ScanRecord[]> = [
+    () => [scan, ...existing],
+    () => [scan, ...existing.map(withoutImage)],
+    () => [withoutImage(scan), ...existing.map(withoutImage)],
+  ];
+  for (const build of attempts) {
+    try {
+      window.localStorage.setItem(KEY, JSON.stringify(build()));
+      return;
+    } catch {
+      // ลองรูปแบบที่เล็กลงในรอบถัดไป
+    }
+  }
+  throw new Error("บันทึกผลการสแกนไม่สำเร็จ (พื้นที่จัดเก็บในเบราว์เซอร์เต็ม)");
+}
+
+function withoutImage(scan: ScanRecord): ScanRecord {
+  const { image: _image, ...rest } = scan;
+  return rest;
 }
 
 export function listScans(): ScanRecord[] {
   if (typeof window === "undefined") return [];
-  const raw = window.localStorage.getItem(KEY);
-  return raw ? (JSON.parse(raw) as ScanRecord[]) : [];
+  let raw: string | null = null;
+  try {
+    raw = window.localStorage.getItem(KEY);
+    const parsed: unknown = raw ? JSON.parse(raw) : [];
+    if (Array.isArray(parsed)) return parsed as ScanRecord[];
+  } catch {
+    // ตกลงมาเก็บสำรองด้านล่าง
+  }
+  // ข้อมูลเสียหาย ให้ถือว่าไม่มีประวัติ แทนที่จะทำให้ทั้งหน้าพัง แต่เก็บสำเนาไว้
+  // ก่อนที่ saveScan ครั้งต่อไปจะเขียนทับ เพื่อให้กู้คืนได้
+  if (raw) {
+    try {
+      window.localStorage.setItem(`${KEY}:corrupt`, raw);
+    } catch {
+      // พื้นที่เต็ม ไม่มีอะไรทำต่อได้
+    }
+  }
+  return [];
 }
 
 export function getScan(id: string): ScanRecord | undefined {

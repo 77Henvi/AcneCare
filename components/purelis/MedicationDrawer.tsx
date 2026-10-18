@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTreatment } from "@/lib/treatmentContext";
@@ -16,13 +16,25 @@ import {
 export default function MedicationDrawer() {
   const { selectedMedication, setSelectedMedication } = useTreatment();
 
-  if (!selectedMedication) return null;
+  // จำตัวยาล่าสุดไว้ เพื่อให้มีเนื้อหาแสดงระหว่าง animation ตอนปิด
+  const lastMedicationRef = useRef(selectedMedication);
+  if (selectedMedication) lastMedicationRef.current = selectedMedication;
+  const m = lastMedicationRef.current;
 
-  const m = selectedMedication;
+  // กด Esc เพื่อปิด
+  useEffect(() => {
+    if (!selectedMedication) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSelectedMedication(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [selectedMedication, setSelectedMedication]);
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex justify-end">
+      {selectedMedication && m && (
+      <div key="medication-drawer" className="fixed inset-0 z-50 flex justify-end">
         {/* Backdrop Fade */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -180,6 +192,7 @@ export default function MedicationDrawer() {
           </div>
         </motion.div>
       </div>
+      )}
     </AnimatePresence>
   );
 }

@@ -1,24 +1,27 @@
 import type { InferenceSession } from "onnxruntime-web";
 import type { AcneType } from "@/lib/taxonomy";
 import type { AcneFinding, PredictionResult, Predictor } from "./types";
-import { analyzeFace } from "./faceLandmarker";
-import { toAcneType, toRegion } from "./utils";
+import { toAcneType } from "./utils";
 
-// ลำดับต้องตรงกับ model.names ตอนเทรน
-const CLASS_NAMES = ["Blackheads", "Cysts", "Nodules", "Papules", "Pustules", "Whiteheads"];
-const NUM_CLASSES = CLASS_NAMES.length;
 const SIZE = 640;
 const IOU_THRESHOLD = 0.45;
 
-const MIN_CONFIDENCE: Record<AcneType, number> = {
-    no_visible_acne: 1,
-    whitehead: 0.25,
-    blackhead: 0.25,
-    papule: 0.25,
-    pustule: 0.25,
-    nodule: 0.15,
-    cyst: 0.15,
+// กฎ "พบสิวชนิด X" = มีกล่องชนิด X ที่คะแนน >= ค่าของชนิดนั้น (ปรับตามผลบนชุด valid)
+// ชนิดที่พบน้อยและต้องไม่พลาด (หัวช้าง ซีสต์) ใช้เกณฑ์ต่ำกว่า
+export const CONFIDENCE_THRESHOLDS: Record<Exclude<AcneType, "no_visible_acne">, number> = {
+    whitehead: 0.2, // สิวหัวขาว (สิวอุดตันหัวปิด)
+    blackhead: 0.2, // สิวหัวดำ (สิวอุดตันหัวเปิด)
+    papule: 0.2, // สิวตุ่มแดง
+    pustule: 0.15, // สิวตุ่มหนอง
+    nodule: 0.15, // สิวหัวช้าง
+    cyst: 0.15, // สิวซีสต์
 };
+
+export interface OnnxPredictorOptions {
+    modelVersion: string;
+    /** ลำดับต้องตรงกับ model.names ตอนเทรน */
+    classNames: readonly string[];
+}
 
 interface Box {
     x1: number;
@@ -49,12 +52,24 @@ function nms(boxes: Box[]): Box[] {
     return kept;
 }
 
-function decodeDetections(dims: readonly number[], out: Float32Array): Box[] {
+function decodeDetections(
+    dims: readonly number[],
+    out: Float32Array,
+    classTypes: readonly (AcneType | null)[],
+): Box[] {
     const candidates: Box[] = [];
+    const numClasses = classTypes.length;
 
     if (dims.length !== 3 || dims[0] !== 1) {
         throw new Error(`Unsupported ONNX output shape: [${dims.join(", ")}]`);
     }
+
+    // คืน type ของคลาสที่คะแนนผ่านเกณฑ์ หรือ null ถ้าต้องข้าม
+    const acceptedType = (classIndex: number, score: number): AcneType | null => {
+        const type = classTypes[classIndex];
+        if (!type || type === "no_visible_acne" || score < CONFIDENCE_THRESHOLDS[type]) return null;
+        return type;
+    };
 
     if (dims[2] === 6) {
         const numDetections = dims[1];
@@ -66,19 +81,10 @@ function decodeDetections(dims: readonly number[], out: Float32Array): Box[] {
             const offset = i * 6;
             const score = out[offset + 4];
             const classIndex = Math.round(out[offset + 5]);
-            if (
-                !Number.isFinite(score) ||
-                score < 0.1 ||
-                classIndex < 0 ||
-                classIndex >= NUM_CLASSES
-            ) {
-                continue;
-            }
+            if (!Number.isFinite(score) || classIndex < 0 || classIndex >= numClasses) continue;
 
-            const type = toAcneType(CLASS_NAMES[classIndex]);
-            if (!type || type === "no_visible_acne" || score < MIN_CONFIDENCE[type]) {
-                continue;
-            }
+            const type = acceptedType(classIndex, score);
+            if (!type) continue;
 
             candidates.push({
                 x1: out[offset],
@@ -93,13 +99,13 @@ function decodeDetections(dims: readonly number[], out: Float32Array): Box[] {
         return candidates;
     }
 
-    const channelsFirst = dims[1] === NUM_CLASSES + 4;
-    const channelsLast = dims[2] === NUM_CLASSES + 4;
+    const rowSize = numClasses + 4;
+    const channelsFirst = dims[1] === rowSize;
+    const channelsLast = dims[2] === rowSize;
     if (!channelsFirst && !channelsLast) {
         throw new Error(`Unsupported ONNX output shape: [${dims.join(", ")}]`);
     }
 
-    const rowSize = NUM_CLASSES + 4;
     const numBoxes = channelsFirst ? dims[2] : dims[1];
     if (out.length !== rowSize * numBoxes) {
         throw new Error("ONNX output data length does not match its dimensions");
@@ -109,7 +115,7 @@ function decodeDetections(dims: readonly number[], out: Float32Array): Box[] {
         let maxScore = 0;
         let maxClass = -1;
 
-        for (let classIndex = 0; classIndex < NUM_CLASSES; classIndex++) {
+        for (let classIndex = 0; classIndex < numClasses; classIndex++) {
             const scoreIndex = channelsFirst
                 ? (4 + classIndex) * numBoxes + i
                 : i * rowSize + 4 + classIndex;
@@ -120,12 +126,10 @@ function decodeDetections(dims: readonly number[], out: Float32Array): Box[] {
             }
         }
 
-        if (maxClass < 0 || maxScore < 0.1) continue;
+        if (maxClass < 0) continue;
 
-        const type = toAcneType(CLASS_NAMES[maxClass]);
-        if (!type || type === "no_visible_acne" || maxScore < MIN_CONFIDENCE[type]) {
-            continue;
-        }
+        const type = acceptedType(maxClass, maxScore);
+        if (!type) continue;
 
         const coordinateIndex = (coordinate: number) =>
             channelsFirst ? coordinate * numBoxes + i : i * rowSize + coordinate;
@@ -153,13 +157,18 @@ async function getOrt() {
     return ortModule.default || ortModule;
 }
 
+const clamp01 = (value: number) => Math.max(0, Math.min(1, value));
+
 export class OnnxPredictor implements Predictor {
-    readonly modelVersion = "acne-yolo26s-mediapipe-640";
+    readonly modelVersion: string;
     private modelUrl: string;
+    private classTypes: (AcneType | null)[];
     private sessionPromise: Promise<InferenceSession> | null = null;
 
-    constructor(modelUrl = "/models/best.onnx") {
+    constructor(modelUrl: string, options: OnnxPredictorOptions) {
         this.modelUrl = modelUrl;
+        this.modelVersion = options.modelVersion;
+        this.classTypes = options.classNames.map(toAcneType);
     }
 
     private getSession(): Promise<InferenceSession> {
@@ -176,6 +185,13 @@ export class OnnxPredictor implements Predictor {
         return this.sessionPromise;
     }
 
+    /** โหลดโมเดลล่วงหน้า เพื่อไม่ให้การสแกนครั้งแรกต้องรอดาวน์โหลด */
+    preload(): void {
+        this.getSession().catch(() => {
+            // error จริงจะแสดงตอน predict() เรียก getSession() อีกครั้ง
+        });
+    }
+
     async predict(image: HTMLImageElement | HTMLCanvasElement): Promise<PredictionResult> {
         if (!image) throw new Error("ไม่มีข้อมูลภาพส่งเข้ามา");
 
@@ -185,11 +201,7 @@ export class OnnxPredictor implements Predictor {
             throw new Error("ขนาดภาพเป็น 0 (กล้องอาจจะยังไม่เปิด หรือรูปยังโหลดไม่เสร็จ)");
         }
 
-        const [ort, session, face] = await Promise.all([
-            getOrt(),
-            this.getSession(),
-            analyzeFace(image, srcW, srcH),
-        ]);
+        const [ort, session] = await Promise.all([getOrt(), this.getSession()]);
 
         // Letterbox: ย่อภาพโดยคงสัดส่วน แล้วเติมขอบสีเทาให้เป็น 640x640
         // ให้ตรงกับ preprocessing ของ Ultralytics
@@ -231,30 +243,22 @@ export class OnnxPredictor implements Predictor {
             throw new Error(`ONNX model did not return the expected output: ${outputName}`);
         }
 
-        const candidates = decodeDetections(outputTensor.dims, outputTensor.data as Float32Array);
-        const acne: AcneFinding[] = nms(candidates).map((box) => {
-            const rawCx = ((box.x1 + box.x2) / 2 - padX) / scale;
-            const rawCy = ((box.y1 + box.y2) / 2 - padY) / scale;
-            const cx = Math.max(0, Math.min(srcW, rawCx));
-            const cy = Math.max(0, Math.min(srcH, rawCy));
+        const candidates = decodeDetections(outputTensor.dims, outputTensor.data as Float32Array, this.classTypes);
+        const acne: AcneFinding[] = [];
+        for (const box of nms(candidates)) {
+            // แปลงพิกัดจากภาพ letterbox 640x640 กลับเป็นสัดส่วนของภาพต้นฉบับ
+            const x1 = clamp01((box.x1 - padX) / scale / srcW);
+            const y1 = clamp01((box.y1 - padY) / scale / srcH);
+            const x2 = clamp01((box.x2 - padX) / scale / srcW);
+            const y2 = clamp01((box.y2 - padY) / scale / srcH);
+            if (x2 <= x1 || y2 <= y1) continue;
 
-            return {
-                type: box.type,
-                confidence: box.score,
-                region: face?.locateRegion(cx, cy) ?? toRegion(cx, cy, srcW, srcH),
-            };
-        });
+            acne.push({ type: box.type, confidence: box.score, box: { x1, y1, x2, y2 } });
+        }
 
         return {
             modelVersion: this.modelVersion,
             imageQuality: { score: 1, usable: true, reasons: [] },
-            faceOrientation: face?.orientation ?? {
-                detected: false,
-                direction: "not_detected",
-                yawDegrees: null,
-                pitchDegrees: null,
-                rollDegrees: null,
-            },
             acne,
         };
     }

@@ -125,7 +125,7 @@ export default function HistoryPage() {
       <motion.div variants={item} className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <span className="font-display text-xs font-bold uppercase tracking-wider text-[#3D6345]">LOCAL RECORDS</span>
-          <h1 className="mt-1 font-display text-3xl font-bold text-[#1C3221]">ประวัติการตรวจสภาพผิว</h1>
+          <h1 className="mt-1 font-display text-3xl font-bold text-[#1C3221]">ประวัติการตรวจสิว</h1>
           <p className="mt-1 text-xs sm:text-sm text-ink/70">
             ข้อมูลทั้งหมดบันทึกเฉพาะบนเบราว์เซอร์ของคุณ และลบได้ทุกเมื่อ
           </p>

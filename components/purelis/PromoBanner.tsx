@@ -28,7 +28,7 @@ export default function PromoBanner() {
               </span>
 
               <h2 className="font-display text-3xl font-bold tracking-tight text-[#16271A] sm:text-4xl md:text-5xl leading-[1.18]">
-                ข้อมูลตัวยารักษาสิวตามชนิดสิว <br className="hidden sm:inline" />
+                ข้อมูลตัวยารักษาสิว <br className="hidden sm:inline" />
                 อ้างอิงเอกสารทางการแพทย์
               </h2>
 
