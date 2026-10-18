@@ -77,12 +77,12 @@ export default function Navbar() {
             หน้าแรก
           </Link>
           <div className="group relative">
-            <a href="#medications" className="flex items-center gap-1 transition-colors hover:text-olive-600">
+            <Link href="/#medications" className="flex items-center gap-1 transition-colors hover:text-olive-600">
               ข้อมูลตัวยารักษาสิว
               <svg className="h-3 w-3 opacity-60 group-hover:rotate-180 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
-            </a>
+            </Link>
             <div className="invisible absolute -left-4 top-full mt-2 w-56 rounded-xl border border-sand-300/80 bg-white p-2.5 shadow-2xl opacity-0 transition-all duration-300 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 translate-y-2">
               {MEDICATIONS.map((med) => (
                 <button
@@ -202,7 +202,7 @@ export default function Navbar() {
                 <CameraScanIcon className="h-4 w-4" />
                 <span>สแกนผิวด้วย AI</span>
               </Link>
-              <a href="#medications" onClick={() => setMobileMenuOpen(false)} className="py-1 hover:text-olive-700">ข้อมูลตัวยารักษาสิว</a>
+              <Link href="/#medications" onClick={() => setMobileMenuOpen(false)} className="py-1 hover:text-olive-700">ข้อมูลตัวยารักษาสิว</Link>
               <Link href="/acne-types" onClick={() => setMobileMenuOpen(false)} className="py-1 hover:text-olive-700">ชนิดสิว 6 ชนิด</Link>
               <Link href="/history" onClick={() => setMobileMenuOpen(false)} className="py-1 hover:text-olive-700">ประวัติการตรวจ</Link>
               <Link href="/about" onClick={() => setMobileMenuOpen(false)} className="py-1 hover:text-olive-700">เกี่ยวกับระบบ</Link>

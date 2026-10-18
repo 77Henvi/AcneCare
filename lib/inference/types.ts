@@ -1,9 +1,17 @@
-import { AcneType, FaceRegion } from "@/lib/taxonomy";
+import { AcneType } from "@/lib/taxonomy";
+
+// พิกัดกล่องเป็นสัดส่วน 0..1 เทียบกับภาพต้นฉบับ (ไม่ขึ้นกับขนาดที่แสดงผล)
+export interface BoundingBox {
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+}
 
 export interface AcneFinding {
   type: AcneType;
   confidence: number;
-  region: FaceRegion;
+  box: BoundingBox;
 }
 
 export interface ImageQuality {
@@ -12,26 +20,9 @@ export interface ImageQuality {
   reasons: string[]; // e.g. ["blurry", "low_light"] — empty if usable
 }
 
-export type FaceOrientation =
-  | {
-      detected: true;
-      direction: "front" | "left" | "right";
-      yawDegrees: number;
-      pitchDegrees: number;
-      rollDegrees: number;
-    }
-  | {
-      detected: false;
-      direction: "not_detected";
-      yawDegrees: null;
-      pitchDegrees: null;
-      rollDegrees: null;
-    };
-
 export interface PredictionResult {
   modelVersion: string;
   imageQuality: ImageQuality;
-  faceOrientation?: FaceOrientation;
   acne: AcneFinding[];
 }
 

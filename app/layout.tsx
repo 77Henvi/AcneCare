@@ -7,7 +7,7 @@ import Footer from "@/components/purelis/Footer";
 import MedicationDrawer from "@/components/purelis/MedicationDrawer";
 
 export const metadata: Metadata = {
-  title: "AcneCare AI — ประเมินผิวและสิวเบื้องต้น พร้อมข้อมูลตัวยารักษาสิว",
+  title: "AcneCare AI — ตรวจจับสิวเบื้องต้น พร้อมข้อมูลตัวยารักษาสิว",
   description: "ตรวจวิเคราะห์สิว 6 ชนิดด้วย AI พร้อมแนะนำตัวยาและเวชสำอางที่เหมาะสมตามหลักการแพทย์",
 };
 

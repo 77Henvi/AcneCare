@@ -15,13 +15,6 @@ export type AcneType =
   | "nodule"
   | "cyst";
 
-export type FaceRegion =
-  | "forehead"
-  | "left_cheek"
-  | "right_cheek"
-  | "nose"
-  | "chin";
-
 export const SKIN_TYPES: SkinType[] = ["normal", "oily", "dry", "combination"];
 
 export const ACNE_TYPES: AcneType[] = [
@@ -32,14 +25,6 @@ export const ACNE_TYPES: AcneType[] = [
   "pustule",
   "nodule",
   "cyst",
-];
-
-export const FACE_REGIONS: FaceRegion[] = [
-  "forehead",
-  "left_cheek",
-  "right_cheek",
-  "nose",
-  "chin",
 ];
 
 export const ACNE_LABEL_TH: Record<AcneType, string> = {
@@ -57,14 +42,6 @@ export const SKIN_TYPE_LABEL_TH: Record<SkinType, string> = {
   oily: "ผิวมัน",
   dry: "ผิวแห้ง",
   combination: "ผิวผสม",
-};
-
-export const FACE_REGION_LABEL_TH: Record<FaceRegion, string> = {
-  forehead: "หน้าผาก",
-  left_cheek: "แก้มซ้าย",
-  right_cheek: "แก้มขวา",
-  nose: "จมูก",
-  chin: "คาง",
 };
 
 // Severity drives the safety layer (see lib/recommendation). Never let the

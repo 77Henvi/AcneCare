@@ -24,29 +24,60 @@ export default function Camera({ onCapture }: CameraProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+  const mountedRef = useRef(true);
+  const startingRef = useRef(false);
   const [streamActive, setStreamActive] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const stopStream = useCallback(() => {
+    streamRef.current?.getTracks().forEach((t) => t.stop());
+    streamRef.current = null;
+    if (videoRef.current) videoRef.current.srcObject = null;
+    setStreamActive(false);
+  }, []);
+
   const startCamera = useCallback(async () => {
+    // กันกดซ้ำระหว่างรอสิทธิ์กล้อง ไม่ให้ได้ stream ซ้อนกันจนปิดไม่หมด
+    if (startingRef.current || streamRef.current) return;
+    startingRef.current = true;
     setError(null);
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: "user", width: { ideal: 720 }, height: { ideal: 720 } },
       });
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        await videoRef.current.play();
-        setStreamActive(true);
+      // component ถูกถอดออกระหว่างรอสิทธิ์ ต้องปิด stream ทิ้งเอง เพราะ cleanup ทำงานไปก่อนแล้ว
+      if (!mountedRef.current) {
+        stream.getTracks().forEach((t) => t.stop());
+        return;
       }
+      streamRef.current = stream;
+      // <video> เป็น element ที่ render อยู่เสมอ จึงผูก stream ได้ทันที
+      const video = videoRef.current;
+      if (!video) {
+        stopStream();
+        return;
+      }
+      video.srcObject = streamRef.current;
+      await video.play();
+      setStreamActive(true);
     } catch {
-      setError("ไม่สามารถเข้าถึงกล้องได้ กรุณาอนุญาตการใช้กล้อง หรืออัปโหลดรูปแทน");
+      stopStream();
+      if (mountedRef.current) {
+        setError("ไม่สามารถเข้าถึงกล้องได้ กรุณาอนุญาตการใช้กล้อง หรืออัปโหลดรูปแทน");
+      }
+    } finally {
+      startingRef.current = false;
     }
-  }, []);
+  }, [stopStream]);
 
+  // ปิดกล้องตอน unmount (อ่านจาก streamRef เพราะ videoRef.current ถูกล้างเป็น null ก่อน cleanup)
   useEffect(() => {
+    mountedRef.current = true;
     return () => {
-      const stream = videoRef.current?.srcObject as MediaStream | undefined;
-      stream?.getTracks().forEach((t) => t.stop());
+      mountedRef.current = false;
+      streamRef.current?.getTracks().forEach((t) => t.stop());
+      streamRef.current = null;
     };
   }, []);
 
@@ -54,29 +85,48 @@ export default function Camera({ onCapture }: CameraProps) {
     const video = videoRef.current;
     const canvas = canvasRef.current;
     if (!video || !canvas) return;
+    if (video.videoWidth === 0 || video.videoHeight === 0) {
+      setError("กล้องยังไม่พร้อม กรุณารอสักครู่แล้วลองใหม่");
+      return;
+    }
     drawEntireImage(video, video.videoWidth, video.videoHeight, canvas);
     onCapture(canvas);
   }
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
+    const input = e.target;
+    const file = input.files?.[0];
     if (!file) return;
+    setError(null);
+
+    const url = URL.createObjectURL(file);
     const img = new Image();
     img.onload = () => {
+      URL.revokeObjectURL(url);
       const canvas = canvasRef.current;
       if (!canvas) return;
       drawEntireImage(img, img.naturalWidth, img.naturalHeight, canvas);
       onCapture(canvas);
     };
-    img.src = URL.createObjectURL(file);
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      setError("ไม่สามารถอ่านไฟล์รูปนี้ได้ กรุณาลองรูปอื่น (JPG หรือ PNG)");
+    };
+    img.src = url;
+    // ล้างค่า เพื่อให้เลือกไฟล์เดิมซ้ำได้
+    input.value = "";
   }
 
   return (
     <div className="space-y-4">
       <div className="relative aspect-square w-full overflow-hidden rounded-card border border-sand-300 bg-ink/5">
-        {streamActive ? (
-          <video ref={videoRef} className="h-full w-full object-contain" muted playsInline />
-        ) : (
+        <video
+          ref={videoRef}
+          className={`h-full w-full object-contain ${streamActive ? "" : "hidden"}`}
+          muted
+          playsInline
+        />
+        {!streamActive && (
           <div className="flex h-full w-full items-center justify-center text-sm text-ink/50">
             ยังไม่ได้เปิดกล้อง
           </div>
@@ -94,12 +144,20 @@ export default function Camera({ onCapture }: CameraProps) {
             เปิดกล้อง
           </button>
         ) : (
-          <button
-            onClick={captureFromVideo}
-            className="rounded-card bg-teal-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-teal-900 transition-colors"
-          >
-            ถ่ายภาพ
-          </button>
+          <>
+            <button
+              onClick={captureFromVideo}
+              className="rounded-card bg-teal-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-teal-900 transition-colors"
+            >
+              ถ่ายภาพ
+            </button>
+            <button
+              onClick={stopStream}
+              className="rounded-card border border-sand-300 bg-surface px-4 py-2.5 text-sm font-medium text-ink/80 hover:border-teal-400 transition-colors"
+            >
+              ปิดกล้อง
+            </button>
+          </>
         )}
         <button
           onClick={() => fileInputRef.current?.click()}

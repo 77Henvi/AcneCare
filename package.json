@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@mediapipe/tasks-vision": "^1.1.1",
     "framer-motion": "11.3.19",
     "next": "14.2.35",
     "onnxruntime-web": "^1.30.0",

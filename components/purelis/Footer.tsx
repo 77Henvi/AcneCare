@@ -51,7 +51,7 @@ export default function Footer() {
                 <h4 className="font-display text-xs font-bold uppercase tracking-wider text-[#16271A]">
                   100% CLIENT-SIDE PRIVACY
                 </h4>
-                <p className="mt-0.5 text-xs text-[#3E5843]">ภาพถ่ายใบหน้าไม่ถูกส่งขึ้นเซิร์ฟเวอร์</p>
+                <p className="mt-0.5 text-xs text-[#3E5843]">ภาพถ่ายใบหน้าไม่ถูกส่งขึ้นเซิร์ฟเวอร์ เก็บในเบราว์เซอร์ของคุณเท่านั้น</p>
               </div>
             </div>
 
@@ -121,7 +121,7 @@ export default function Footer() {
               ABOUT ACNECARE
             </h4>
             <p className="text-xs leading-relaxed text-[#3B5441]">
-              AcneCare เป็นระบบ AI ช่วยประเมินลักษณะผิวและชนิดสิวจากภาพถ่ายใบหน้าเบื้องต้น
+              AcneCare เป็นระบบ AI ช่วยตรวจจับตำแหน่งและชนิดสิวจากภาพถ่ายใบหน้าเบื้องต้น
               พร้อมข้อมูลตัวยารักษาสิวที่อ้างอิงเอกสารทางการแพทย์ เพื่อการดูแลสิวและผิวหน้าอย่างถูกต้องและปลอดภัย
             </p>
             <div>

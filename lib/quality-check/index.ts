@@ -29,9 +29,10 @@ export function checkImageQuality(canvas: HTMLCanvasElement): ImageQuality {
     const luma = 0.299 * r + 0.587 * g + 0.114 * b;
     sum += luma;
 
-    const next = data[i + step];
-    if (next !== undefined) {
-      edgeSum += Math.abs(next - luma);
+    // เทียบความสว่างกับพิกเซลที่สุ่มถัดไป (เดิมเอาค่าสีแดงมาเทียบกับ luma ทำให้ผิวที่อมแดงดูคมเสมอ)
+    if (i + step + 2 < data.length) {
+      const nextLuma = 0.299 * data[i + step] + 0.587 * data[i + step + 1] + 0.114 * data[i + step + 2];
+      edgeSum += Math.abs(nextLuma - luma);
     }
     samples++;
   }
@@ -42,11 +43,13 @@ export function checkImageQuality(canvas: HTMLCanvasElement): ImageQuality {
   const reasons: string[] = [];
   if (brightness < 0.2) reasons.push("low_light");
   if (brightness > 0.9) reasons.push("overexposed");
-  if (edgeVariance < 2) reasons.push("blurry");
+  // ทดสอบกับภาพสิว 1280px: ภาพคมได้ราว 8-10 ภาพเบลอ (Gaussian blur 8px) ได้ราว 2.4
+  // ชุด images test v0.3: ภาพที่ใช้ได้ส่วนใหญ่ >= 4 แต่ภาพผิวเรียบบางรูปได้ 3.3-4.0 จึงตั้งที่ 3
+  if (edgeVariance < 3) reasons.push("blurry");
   if (width < 480 || height < 480) reasons.push("resolution_too_low");
 
   const brightnessScore = 1 - Math.abs(brightness - 0.5) * 2;
-  const sharpnessScore = Math.min(edgeVariance / 15, 1);
+  const sharpnessScore = Math.min(edgeVariance / 10, 1);
   const score = Math.max(0, Math.min(1, brightnessScore * 0.5 + sharpnessScore * 0.5));
 
   return { score: Math.round(score * 100) / 100, usable: reasons.length === 0, reasons };
